@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Book4U</title>
+    <link rel="stylesheet" href="style (1).css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── Shop Section ── */
+        .shop-section {
+            padding: 0 0 60px;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .shop-header {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+
+        .shop-header h1 {
+            font-size: 2.2rem;
+            color: #1a2e1a;
+            margin-bottom: 8px;
+        }
+
+        .shop-header p {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 18px;
+        }
+
+        .stats-bar {
+            display: inline-flex;
+            gap: 30px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border: 1px solid #a5d6a7;
+            border-radius: 30px;
+            padding: 10px 28px;
+            font-size: 0.88rem;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        /* ── Category Filter ── */
+        .category-filter {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0 20px 28px;
+        }
+
+        .category-card {
+            padding: 9px 22px;
+            border-radius: 25px;
+            border: 2px solid #c8e6c9;
+            background: white;
+            color: #2e7d32;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-card:hover,
+        .category-card.active {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+            box-shadow: 0 4px 14px rgba(76, 175, 80, 0.35);
+        }
+
+        /* ── Full-Width Products Grid ── */
+        .shop-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            padding: 0 24px;
+        }
+
+        .shop-products {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 1100px) {
+            .shop-products {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 780px) {
+            .shop-products {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .shop-products {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── Individual Book Card ── */
+        .shop-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .shop-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 36px rgba(76, 175, 80, 0.18);
+        }
+
+
+
+        .shop-card-image {
+            height: 240px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f0f4f0, #e8ece8);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .shop-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease, filter 0.4s ease;
+            filter: brightness(1.05) contrast(1.05);
+        }
+
+        .shop-card:hover .shop-card-image img {
+            transform: scale(1.08);
+            filter: brightness(1.1) contrast(1.08);
+        }
+
+        .shop-card-content {
+            padding: 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .shop-card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a2e1a;
+            margin-bottom: 4px;
+        }
+
+        .shop-card-author {
+            font-size: 0.82rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .shop-card-description {
+            font-size: 0.84rem;
+            color: #666;
+            line-height: 1.55;
+            margin-bottom: 10px;
+        }
+
+        .shop-card-genre {
+            font-size: 0.78rem;
+            color: #aaa;
+            margin-bottom: 12px;
+        }
+
+        .shop-card-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .current-price {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #2e7d32;
+        }
+
+        .original-price {
+            font-size: 0.9rem;
+            color: #bbb;
+            text-decoration: line-through;
+        }
+
+        /* ── Action Buttons ── */
+        .shop-card-actions {
+            display: flex;
+            gap: 9px;
+        }
+
+        .add-to-cart-btn {
+            flex: 1;
+            padding: 10px 0;
+            border: 2px solid #4CAF50;
+            background: transparent;
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.22s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .buy-now-btn {
+            flex: 1;
+            padding: 10px 0;
+            border: none;
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.22s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .buy-now-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(27, 94, 32, 0.45);
+            background: linear-gradient(135deg, #0d3b0d, #1b5e20);
+        }
+
+        /* ── Single-Book PayPal Modal ── */
+        .single-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.58);
+            z-index: 6000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .single-modal-overlay.open {
+            display: flex;
+        }
+
+        .single-modal {
+            background: white;
+            border-radius: 22px;
+            width: min(500px, 95vw);
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.28);
+            animation: smSlideUp 0.3s ease;
+        }
+
+        @keyframes smSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .sm-header {
+            background: linear-gradient(135deg, #0070ba, #003087);
+            padding: 22px 26px;
+            border-radius: 22px 22px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .sm-header h2 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .sm-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sm-close:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .sm-body {
+            padding: 26px;
+        }
+
+        .sm-book-info {
+            background: #f0f7ff;
+            border: 1px solid #c2d9f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .sm-book-emoji {
+            font-size: 2.4rem;
+        }
+
+        .sm-book-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1a1a1a;
+            margin-bottom: 3px;
+        }
+
+        .sm-book-price {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #0070ba;
+        }
+
+        .sm-paypal-box {
+            background: linear-gradient(135deg, #f7f9ff, #eef4ff);
+            border: 2px solid #c2d4f0;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .paypal-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #003087;
+            margin-bottom: 6px;
+            letter-spacing: -1px;
+        }
+
+        .paypal-logo span {
+            color: #0070ba;
+        }
+
+        .sm-paypal-box p {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 4px;
+        }
+
+        .sm-paypal-email {
+            font-weight: 700;
+            color: #0070ba;
+            font-size: 1rem;
+        }
+
+        .sm-note {
+            background: #fff8e1;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 11px 15px;
+            font-size: 0.83rem;
+            color: #7b5800;
+            margin-bottom: 18px;
+        }
+
+        .sm-txn-input {
+            margin-bottom: 16px;
+        }
+
+        .sm-txn-input label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 7px;
+            font-size: 0.9rem;
+        }
+
+        .sm-txn-input input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.96rem;
+            background: #f8f9fa;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+
+        .sm-txn-input input:focus {
+            outline: none;
+            border-color: #0070ba;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0, 112, 186, 0.12);
+        }
+
+        .sm-txn-input input.valid {
+            border-color: #4CAF50;
+            background: #f8fdf8;
+        }
+
+        .sm-txn-input input.error {
+            border-color: #e74c3c;
+            background: #fff8f8;
+        }
+
+        .sm-hint {
+            font-size: 0.78rem;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .sm-valid-msg {
+            font-size: 0.84rem;
+            font-weight: 500;
+            min-height: 20px;
+            padding: 3px 0;
+        }
+
+        .sm-valid-msg.ok {
+            color: #4CAF50;
+        }
+
+        .sm-valid-msg.err {
+            color: #e74c3c;
+        }
+
+        .sm-confirm-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0070ba, #003087);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 6px 20px rgba(0, 112, 186, 0.35);
+        }
+
+        .sm-confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0, 112, 186, 0.45);
+        }
+
+        .sm-confirm-btn:disabled {
+            background: #bdbdbd;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .sm-success {
+            text-align: center;
+            padding: 16px 0;
+        }
+
+        .sm-success .s-icon {
+            font-size: 60px;
+            margin-bottom: 12px;
+        }
+
+        .sm-success h3 {
+            font-size: 1.3rem;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .sm-success p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .sm-txn-badge {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 8px;
+            padding: 9px 14px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #2e7d32;
+            margin: 10px 0;
+            font-weight: 700;
+        }
+
+        .sm-done-btn {
+            margin-top: 16px;
+            padding: 12px 32px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .sm-done-btn:hover {
+            background: #2e7d32;
+        }
+
+        /* Welcome Modal */
+        .welcome-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .welcome-modal-overlay.active {
+            display: flex;
+        }
+
+        .welcome-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 36px;
+            max-width: 440px;
+            width: 92vw;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+            animation: smSlideUp 0.35s ease;
+        }
+
+        .welcome-modal-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .welcome-modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a2e1a;
+            margin-bottom: 8px;
+        }
+
+        .welcome-modal-name {
+            font-size: 1rem;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .welcome-modal-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 18px;
+        }
+
+        .welcome-tip {
+            font-size: 0.88rem;
+            color: #444;
+            padding: 7px 0;
+        }
+
+        .welcome-modal-btn {
+            margin-top: 18px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #4CAF50, #2e7d32);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .welcome-modal-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="assets/logo.png" alt="Book4U Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index (1).html" class="back-btn">← Back to Home</a></li>
+                <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+                <li><a href="mycart.html" class="nav-link">My Cart</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="login.html" class="nav-link" id="navLoginBtn">Login</a></li>
+            </ul>
+        </nav>
+        <div class="header-icons">
+            <div class="search-box">
+                <input type="search" placeholder="Search books..." id="searchInput">
+                <button id="searchBtn">🔍</button>
+            </div>
+            <a href="mycart.html" style="text-decoration:none;">
+                <span id="cartIcon">🛒 <span id="cartCount">0</span></span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="shop-section">
+            <div class="shop-header">
+                <h1>📚 Book4U Shop</h1>
+                <p>Browse our collection and find your next favorite read</p>
+                <div class="stats-bar" id="statsBar">
+                    <span>👥 <strong id="statUsers">—</strong> Members</span>
+                    <span>📚 <strong id="statBooks">—</strong> Books</span>
+                    <span>🛒 <strong id="statCarts">—</strong> Active Carts</span>
+                </div>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="category-filter">
+                <button class="category-card active" data-category="all">All Books</button>
+                <button class="category-card" data-category="fiction">Fiction</button>
+                <button class="category-card" data-category="educational">Educational</button>
+                <button class="category-card" data-category="non-fiction">Non-Fiction</button>
+                <button class="category-card" data-category="anime">Anime Books</button>
+            </div>
+
+            <div class="shop-container">
+                <div class="shop-products" id="shopProducts">
+                    <!-- Book 1 -->
+                    <div class="shop-card" data-category="fiction">
+                        <div class="shop-card-image">
+                            <img src="assets/book1.jpg" alt="The Great Adventure">
+                        </div>
+                        <div class="shop-card-content">
+                            <h4 class="shop-card-title">The Great Adventure</h4>
+                            <p class="shop-card-author">By John Smith</p>
+                            <p class="shop-card-description">An epic tale of courage and discovery. Follow protagonist
+                                Mark as he embarks on a journey across mystical lands.</p>
+                            <p class="shop-card-genre"><strong>Genre:</strong> Adventure, Fantasy |
+                                <strong>Pages:</strong> 324
+                            </p>
+                            <div class="shop-card-price">
+                                <span class="current-price">$9.99</span>
+                                <span class="original-price">$14.99</span>
+                            </div>
+                            <div class="shop-card-actions">
+                                <button class="add-to-cart-btn add-to-cart" data-id="1" data-title="The Great Adventure"
+                                    data-price="9.99" data-category="fiction">🛒 Add to Cart</button>
+                                <button class="buy-now-btn"
+                                    onclick="openSinglePayment('1','The Great Adventure',9.99)">🅿 Pay Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 2 -->
+                    <div class="shop-card" data-category="educational">
+                        <div class="shop-card-image">
+                            <img src="assets/book2.jpg" alt="Learning Python">
+                        </div>
+                        <div class="shop-card-content">
+                            <h4 class="shop-card-title">Learning Python</h4>
+                            <p class="shop-card-author">By Sarah Johnson</p>
+                            <p class="shop-card-description">Master Python programming from basics to advanced concepts
+                                with practical examples and real-world projects.</p>
+                            <p class="shop-card-genre"><strong>Genre:</strong> Education, Technology |
+                                <strong>Pages:</strong> 456
+                            </p>
+                            <div class="shop-card-price">
+                                <span class="current-price">$14.99</span>
+                                <span class="original-price">$24.99</span>
+                            </div>
+                            <div class="shop-card-actions">
+                                <button class="add-to-cart-btn add-to-cart" data-id="2" data-title="Learning Python"
+                                    data-price="14.99" data-category="educational">🛒 Add to Cart</button>
+                                <button class="buy-now-btn" onclick="openSinglePayment('2','Learning Python',14.99)">🅿
+                                    Pay Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 3 -->
+                    <div class="shop-card" data-category="fiction">
+                        <div class="shop-card-image">
+                            <img src="assets/book3.jpg" alt="Mystery Island">
+                        </div>
+                        <div class="shop-card-content">
+                            <h4 class="shop-card-title">Mystery Island</h4>
+                            <p class="shop-card-author">By Mike Davis</p>
+                            <p class="shop-card-description">A gripping mystery thriller set on a secluded island.
+                                Uncover secrets and solve puzzles in this page-turner.</p>
+                            <p class="shop-card-genre"><strong>Genre:</strong> Mystery, Thriller |
+                                <strong>Pages:</strong> 298
+                            </p>
+                            <div class="shop-card-price">
+                                <span class="current-price">$19.99</span>
+                            </div>
+                            <div class="shop-card-actions">
+                                <button class="add-to-cart-btn add-to-cart" data-id="3" data-title="Mystery Island"
+                                    data-price="19.99" data-category="fiction">🛒 Add to Cart</button>
+                                <button class="buy-now-btn" onclick="openSinglePayment('3','Mystery Island',19.99)">🅿
+                                    Pay Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 4 -->
+                    <div class="shop-card" data-category="educational">
+                        <div class="shop-card-image">
+                            <img src="assets/book4.jpg" alt="Science Explorer">
+                        </div>
+                        <div class="shop-card-content">
+                            <h4 class="shop-card-title">Science Explorer</h4>
+                            <p class="shop-card-author">By Emily Chen</p>
+                            <p class="shop-card-description">Discover the wonders of science through engaging
+                                experiments and fascinating facts.</p>
+                            <p class="shop-card-genre"><strong>Genre:</strong> Education, Science |
+                                <strong>Pages:</strong> 212
+                            </p>
+                            <div class="shop-card-price">
+                                <span class="current-price">$24.99</span>
+                                <span class="original-price">$34.99</span>
+                            </div>
+                            <div class="shop-card-actions">
+                                <button class="add-to-cart-btn add-to-cart" data-id="4" data-title="Science Explorer"
+                                    data-price="24.99" data-category="educational">🛒 Add to Cart</button>
+                                <button class="buy-now-btn" onclick="openSinglePayment('4','Science Explorer',24.99)">🅿
+                                    Pay Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 5 -->
+                    <div class="shop-card" data-category="non-fiction">
+                        <div class="shop-card-image">
+                            <img src="assets/book5.webp" alt="History Uncovered">
+                        </div>
+                        <div class="shop-card-content">
+                            <h4 class="shop-card-title">History Uncovered</h4>
+                            <p class="shop-card-author">By Robert Brown</p>
+                            <p class="shop-card-description">Explore untold stories from history that shaped our world.
+                                A comprehensive journey through time.</p>
+                            <p class="shop-card-genre"><strong>Genre:</strong> History, Non-Fiction |
+                                <strong>Pages:</strong> 387
+                            </p>
+                            <div class="shop-card-price">
+                                <span class="current-price">$12.99</span>
+                                <span class="original-price">$19.99</span>
+                            </div>
+                            <div class="shop-card-actions">
+                                <button class="add-to-cart-btn add-to-cart" data-id="5" data-title="History Uncovered"
+                                    data-price="12.99" data-category="non-fiction">🛒 Add to Cart</button>
+                                <button class="buy-now-btn"
+                                    onclick="openSinglePayment('5','History Uncovered',12.99)">🅿 Pay Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 6 - Anime -->
+                    <div class="shop-card" data-category="anime">
+                        <div class="shop-card-image">
+                            <img src="assets/book6.png" alt="Anime Legends Vol.1">
+                        </div>
+                        <div class="shop-card-content">
+                            <h4 class="shop-card-title">Anime Legends Vol.1</h4>
+                            <p class="shop-card-author">By Kenji Tanaka</p>
+                            <p class="shop-card-description">A stunning manga-style adventure across alternate worlds
+                                with breathtaking artwork.</p>
+                            <p class="shop-card-genre"><strong>Genre:</strong> Anime, Fiction | <strong>Pages:</strong>
+                                220</p>
+                            <div class="shop-card-price">
+                                <span class="current-price">$16.99</span>
+                            </div>
+                            <div class="shop-card-actions">
+                                <button class="add-to-cart-btn add-to-cart" data-id="6" data-title="Anime Legends Vol.1"
+                                    data-price="16.99" data-category="anime">🛒 Add to Cart</button>
+                                <button class="buy-now-btn"
+                                    onclick="openSinglePayment('6','Anime Legends Vol.1',16.99)">🅿 Pay Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 7 - Anime -->
+                    <div class="shop-card" data-category="anime">
+                        <div class="shop-card-image">
+                            <img src="assets/book1.jpg" alt="Attack on Knowledge">
+                        </div>
+                        <div class="shop-card-content">
+                            <h4 class="shop-card-title">Attack on Knowledge</h4>
+                            <p class="shop-card-author">By Hiro Matsuda</p>
+                            <p class="shop-card-description">Action-packed anime universe book collection blending epic
+                                battles with deep storytelling.</p>
+                            <p class="shop-card-genre"><strong>Genre:</strong> Anime, Action | <strong>Pages:</strong>
+                                200</p>
+                            <div class="shop-card-price">
+                                <span class="current-price">$14.50</span>
+                                <span class="original-price">$18.99</span>
+                            </div>
+                            <div class="shop-card-actions">
+                                <button class="add-to-cart-btn add-to-cart" data-id="7" data-title="Attack on Knowledge"
+                                    data-price="14.50" data-category="anime">🛒 Add to Cart</button>
+                                <button class="buy-now-btn"
+                                    onclick="openSinglePayment('7','Attack on Knowledge',14.50)">🅿 Pay Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 8 -->
+                    <div class="shop-card" data-category="educational">
+                        <div class="shop-card-image">
+                            <img src="assets/book2.jpg" alt="Coding 101">
+                        </div>
+                        <div class="shop-card-content">
+                            <h4 class="shop-card-title">Coding 101</h4>
+                            <p class="shop-card-author">By Jane Doe</p>
+                            <p class="shop-card-description">Beginner-friendly coding guide that takes you from zero to
+                                programmer in simple steps.</p>
+                            <p class="shop-card-genre"><strong>Genre:</strong> Education, Programming |
+                                <strong>Pages:</strong> 310
+                            </p>
+                            <div class="shop-card-price">
+                                <span class="current-price">$19.99</span>
+                            </div>
+                            <div class="shop-card-actions">
+                                <button class="add-to-cart-btn add-to-cart" data-id="8" data-title="Coding 101"
+                                    data-price="19.99" data-category="educational">🛒 Add to Cart</button>
+                                <button class="buy-now-btn" onclick="openSinglePayment('8','Coding 101',19.99)">🅿 Pay
+                                    Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Book4U. All rights reserved.</p>
+    </footer>
+
+    <!-- Welcome Modal for New Users -->
+    <div class="welcome-modal-overlay" id="welcomeModal">
+        <div class="welcome-modal">
+            <div class="welcome-modal-icon">🎉</div>
+            <h2 class="welcome-modal-title">Welcome to Book4U!</h2>
+            <p class="welcome-modal-name" id="welcomeUserName"></p>
+            <p class="welcome-modal-text">Your account has been created successfully! Here are a few things you can do:
+            </p>
+            <div class="welcome-modal-tips">
+                <div class="welcome-tip">📚 <strong>Browse</strong> our collection of books below</div>
+                <div class="welcome-tip">🛒 <strong>Add to Cart</strong> any book you like</div>
+                <div class="welcome-tip">🅿️ <strong>Buy Now</strong> for instant PayPal payment per book</div>
+            </div>
+            <button class="welcome-modal-btn" id="welcomeModalClose">Start Shopping →</button>
+        </div>
+    </div>
+
+    <!-- ════ SINGLE-BOOK PayPal PAYMENT MODAL ════ -->
+    <div class="single-modal-overlay" id="singlePayModal" onclick="maybeSingleClose(event)">
+        <div class="single-modal" id="singlePayModalBox">
+
+            <!-- Header -->
+            <div class="sm-header">
+                <h2>🅿 PayPal — Instant Purchase</h2>
+                <button class="sm-close" onclick="closeSinglePayment()">✕</button>
+            </div>
+
+            <div class="sm-body">
+                <!-- Payment view -->
+                <div id="smPayView">
+                    <!-- Book info summary -->
+                    <div class="sm-book-info">
+                        <div class="sm-book-emoji">📚</div>
+                        <div>
+                            <div class="sm-book-title" id="smBookTitle">Book Title</div>
+                            <div class="sm-book-price" id="smBookPrice">$0.00</div>
+                        </div>
+                    </div>
+
+                    <!-- PayPal instructions -->
+                    <div class="sm-paypal-box">
+                        <div class="paypal-logo">Pay<span>Pal</span></div>
+                        <p>Send your payment to:</p>
+                        <div class="sm-paypal-email">payments@book4u.com</div>
+                        <p style="margin-top:6px;font-size:0.8rem;color:#777;">Include the book title in your payment
+                            note</p>
+                    </div>
+
+                    <div class="sm-note">
+                        ⚠️ After sending payment via PayPal, enter your <strong>PayPal Transaction ID</strong> below to
+                        confirm your purchase.
+                    </div>
+
+                    <!-- Transaction ID Input -->
+                    <div class="sm-txn-input">
+                        <label>PayPal Transaction ID *</label>
+                        <input type="text" id="smTxnInput" placeholder="e.g. 5O190127TN364715T"
+                            oninput="validateSmTxn()">
+                        <div class="sm-hint">17 alphanumeric characters — found in your PayPal payment confirmation
+                            email</div>
+                        <div class="sm-valid-msg" id="smValidMsg"></div>
+                    </div>
+
+                    <button class="sm-confirm-btn" id="smConfirmBtn" onclick="confirmSinglePurchase()" disabled>
+                        ✅ Confirm Purchase
+                    </button>
+                </div>
+
+                <!-- Success view -->
+                <div id="smSuccessView" style="display:none;">
+                    <div class="sm-success">
+                        <div class="s-icon">🎉</div>
+                        <h3>Purchase Confirmed!</h3>
+                        <p>Thank you for your payment.</p>
+                        <div class="sm-txn-badge" id="smConfirmedTxn"></div>
+                        <p style="font-size:0.82rem;color:#888;">You will receive your book access details shortly.</p>
+                        <button class="sm-done-btn" onclick="closeSinglePayment()">Done ✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script (1).js"></script>
+    <script>
+        // ── Single-Book Payment State ──
+        let _smBookId = '', _smBookTitle = '', _smBookPrice = 0;
+
+        function openSinglePayment(id, title, price) {
+            _smBookId = id;
+            _smBookTitle = title;
+            _smBookPrice = parseFloat(price);
+
+            document.getElementById('smBookTitle').textContent = title;
+            document.getElementById('smBookPrice').textContent = '$' + _smBookPrice.toFixed(2);
+
+            // Reset state
+            document.getElementById('smTxnInput').value = '';
+            document.getElementById('smTxnInput').className = '';
+            document.getElementById('smValidMsg').textContent = '';
+            document.getElementById('smValidMsg').className = 'sm-valid-msg';
+            document.getElementById('smConfirmBtn').disabled = true;
+            document.getElementById('smPayView').style.display = 'block';
+            document.getElementById('smSuccessView').style.display = 'none';
+
+            document.getElementById('singlePayModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        window.openSinglePayment = openSinglePayment;
+
+        function closeSinglePayment() {
+            document.getElementById('singlePayModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        window.closeSinglePayment = closeSinglePayment;
+
+        function maybeSingleClose(e) {
+            if (e.target === document.getElementById('singlePayModal')) closeSinglePayment();
+        }
+        window.maybeSingleClose = maybeSingleClose;
+
+        function validateSmTxn() {
+            const input = document.getElementById('smTxnInput');
+            const msg = document.getElementById('smValidMsg');
+            const btn = document.getElementById('smConfirmBtn');
+            const raw = input.value.trim().toUpperCase();
+
+            if (!raw) {
+                input.className = '';
+                msg.textContent = '';
+                msg.className = 'sm-valid-msg';
+                btn.disabled = true;
+                return;
+            }
+
+            // PayPal IDs: 17 alphanumeric chars
+            const valid = /^[A-Z0-9]{17}$/.test(raw);
+            input.className = valid ? 'valid' : 'error';
+            msg.className = 'sm-valid-msg ' + (valid ? 'ok' : 'err');
+            msg.textContent = valid
+                ? '✅ Valid PayPal transaction ID'
+                : (raw.length < 17 ? `❌ PayPal IDs are 17 characters (you have ${raw.length})`
+                    : raw.length > 17 ? `❌ Too long — PayPal IDs are exactly 17 characters`
+                        : '❌ Only letters and numbers allowed');
+            btn.disabled = !valid;
+        }
+        window.validateSmTxn = validateSmTxn;
+
+        async function confirmSinglePurchase() {
+            const input = document.getElementById('smTxnInput');
+            const btn = document.getElementById('smConfirmBtn');
+            const txnId = input.value.trim().toUpperCase();
+            if (!txnId) return;
+
+            btn.disabled = true;
+            btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.4);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Processing...';
+
+            const user = typeof getLoggedInUser === 'function' ? getLoggedInUser() : null;
+            try {
+                const res = await fetch('/api/purchase', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: user ? user.id : null,
+                        transactionId: txnId,
+                        paymentMethod: 'paypal',
+                        cartItems: [{ id: _smBookId, title: _smBookTitle, price: _smBookPrice, category: 'shop' }],
+                        total: _smBookPrice.toFixed(2)
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('smConfirmedTxn').textContent = 'Transaction ID: ' + txnId;
+                    document.getElementById('smPayView').style.display = 'none';
+                    document.getElementById('smSuccessView').style.display = 'block';
+                } else {
+                    btn.disabled = false;
+                    btn.textContent = '✅ Confirm Purchase';
+                    alert('❌ ' + (data.message || 'Purchase failed. Please try again.'));
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btn.textContent = '✅ Confirm Purchase';
+                alert('❌ Cannot connect to server. Check your connection.');
+            }
+        }
+        window.confirmSinglePurchase = confirmSinglePurchase;
+    </script>
+</body>
+
+</html>
