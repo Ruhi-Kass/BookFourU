@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book4U - Your One-Stop Bookstore</title>
+    <meta name="description"
+        content="Discover a world of books at unbeatable prices. Book4U offers educational, fiction, non-fiction, and anime mangass.">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="assets/logo.png" alt="Book4U Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" data-section="home" class="nav-link active">Home</a></li>
+                <li><a href="shop.html" class="nav-link">Shop</a></li>
+                <li><a href="about.html" data-section="about" class="nav-link">About Us</a></li>
+                <li><a href="contact.html" data-section="contact" class="nav-link">Contact Us</a></li>
+                <li><a href="login.html" class="nav-link" id="navLoginBtn">Login</a></li>
+            </ul>
+        </nav>
+        <div class="header-icons">
+            <a href="mycart.html" class="nav-link" style="color: #333; text-decoration: none;">My Cart</a>
+            <span id="cartIcon" style="cursor: pointer;">🛒 <span id="cartCount">0</span></span>
+        </div>
+    </header>
+
+    <main>
+        <!-- HOME SECTION -->
+        <section id="home" class="page-section active">
+            <section class="hero-banner">
+                <!-- Floating Book Animations -->
+                <span class="floating-book fb-1">📚</span>
+                <span class="floating-book fb-2">📖</span>
+                <span class="floating-book fb-3">📕</span>
+                <span class="floating-book fb-4">📗</span>
+                <span class="floating-book fb-5">📘</span>
+                <span class="floating-book fb-6">📙</span>
+                <span class="floating-book fb-7">📓</span>
+                <span class="floating-book fb-8">📒</span>
+                <span class="floating-book fb-9">📖</span>
+                <span class="floating-book fb-10">📚</span>
+
+                <h1>Welcome to Book4U</h1>
+                <h2>Your One-Stop Bookstore</h2>
+                <p>Discover a world of books at unbeatable prices.</p>
+                <!-- Live Stats -->
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="statUsers">—</span>
+                        <span class="stat-label">Members</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="statBooks">—</span>
+                        <span class="stat-label">Books</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="statCarts">—</span>
+                        <span class="stat-label">Active Carts</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Animated Book Divider -->
+            <div class="book-divider">
+                <div class="divider-line"></div>
+                <span class="divider-icon">📚</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <section class="categories">
+                <h3 class="section-title">Shop by Category</h3>
+                <div class="cat-item" data-category="educational" style="cursor: pointer;">
+                    <div class="circle">📚</div>
+                    <p>Educational</p>
+                </div>
+                <div class="cat-item" data-category="fiction" style="cursor: pointer;">
+                    <div class="circle">📖</div>
+                    <p>Fiction</p>
+                </div>
+                <div class="cat-item" data-category="non-fiction" style="cursor: pointer;">
+                    <div class="circle">📕</div>
+                    <p>Non-Fiction</p>
+                </div>
+                <!-- Changed from Children's Books to anime mangass as requested -->
+                <div class="cat-item" data-category="anime" style="cursor: pointer;">
+                    <div class="circle">🎌</div>
+                    <p>anime mangass</p>
+                </div>
+            </section>
+
+            <!-- Animated Book Divider -->
+            <div class="book-divider">
+                <div class="divider-line"></div>
+                <span class="divider-icon">📖</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <section class="featured-books">
+                <h3 class="section-title">Featured Books</h3>
+                <div class="product-grid">
+                    <div class="product-card">
+    <img src="assets/book1.jpg" alt="Learning Python" class="book-img">
+    <h4>Learning Python</h4>
+    <p>Sarah J.</p>
+    <p class="price">$14.99</p>
+    <button class="add-to-cart" data-id="1" data-title="Learning Python" data-price="14.99" data-category="educational">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book2.jpg" alt="Mastering Linux" class="book-img">
+    <h4>Mastering Linux</h4>
+    <p>Sunil K. Joseph</p>
+    <p class="price">$19.99</p>
+    <button class="add-to-cart" data-id="2" data-title="Mastering Linux" data-price="19.99" data-category="educational">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book3.jpg" alt="Web Development 101" class="book-img">
+    <h4>Web Development 101</h4>
+    <p>Dev Team</p>
+    <p class="price">$12.99</p>
+    <button class="add-to-cart" data-id="3" data-title="Web Development 101" data-price="12.99" data-category="educational">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book4.jpg" alt="The Silent Forest" class="book-img">
+    <h4>The Silent Forest</h4>
+    <p>Emma Woods</p>
+    <p class="price">$11.99</p>
+    <button class="add-to-cart" data-id="4" data-title="The Silent Forest" data-price="11.99" data-category="fiction">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book5.jpg" alt="Echoes of Time" class="book-img">
+    <h4>Echoes of Time</h4>
+    <p>Arthur C.</p>
+    <p class="price">$15.50</p>
+    <button class="add-to-cart" data-id="5" data-title="Echoes of Time" data-price="15.50" data-category="fiction">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book6.jpg" alt="The Last Hero" class="book-img">
+    <h4>The Last Hero</h4>
+    <p>Jack Black</p>
+    <p class="price">$13.99</p>
+    <button class="add-to-cart" data-id="6" data-title="The Last Hero" data-price="13.99" data-category="fiction">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book7.jpg" alt="History Uncovered" class="book-img">
+    <h4>History Uncovered</h4>
+    <p>Robert B.</p>
+    <p class="price">$16.99</p>
+    <button class="add-to-cart" data-id="7" data-title="History Uncovered" data-price="16.99" data-category="non-fiction">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book8.jpg" alt="Atomic Habits" class="book-img">
+    <h4>Atomic Habits</h4>
+    <p>James Clear</p>
+    <p class="price">$18.00</p>
+    <button class="add-to-cart" data-id="8" data-title="Atomic Habits" data-price="18.00" data-category="non-fiction">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book9.jpg" alt="Deep Work" class="book-img">
+    <h4>Deep Work</h4>
+    <p>Cal Newport</p>
+    <p class="price">$17.50</p>
+    <button class="add-to-cart" data-id="9" data-title="Deep Work" data-price="17.50" data-category="non-fiction">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book10.jpg" alt="Jujutsu Battles Vol 1" class="book-img">
+    <h4>Jujutsu Battles Vol 1</h4>
+    <p>Gege A.</p>
+    <p class="price">$9.99</p>
+    <button class="add-to-cart" data-id="10" data-title="Jujutsu Battles Vol 1" data-price="9.99" data-category="anime mangas">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book11.jpg" alt="Ninja Chronicles" class="book-img">
+    <h4>Ninja Chronicles</h4>
+    <p>Masashi K.</p>
+    <p class="price">$8.99</p>
+    <button class="add-to-cart" data-id="11" data-title="Ninja Chronicles" data-price="8.99" data-category="anime mangas">Add to Cart</button>
+</div>
+
+<div class="product-card">
+    <img src="assets/book12.jpg" alt="Hero Academy" class="book-img">
+    <h4>Hero Academy</h4>
+    <p>Kohei H.</p>
+    <p class="price">$10.50</p>
+    <button class="add-to-cart" data-id="12" data-title="Hero Academy" data-price="10.50" data-category="anime mangas">Add to Cart</button>
+</div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Book4U. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <style>
+        @keyframes pulse-blue {
+            0% {
+                box-shadow: 0 0 0 0 rgba(71, 45, 167, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(74, 144, 226, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(74, 144, 226, 0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* ── Floating Book Animations ── */
+        @keyframes floatBook1 {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.7;
+            }
+
+            25% {
+                transform: translate(15px, -30px) rotate(5deg);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translate(-10px, -50px) rotate(-3deg);
+                opacity: 0.8;
+            }
+
+            75% {
+                transform: translate(20px, -25px) rotate(4deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes floatBook2 {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+
+            33% {
+                transform: translate(-20px, -40px) rotate(-8deg) scale(1.1);
+            }
+
+            66% {
+                transform: translate(15px, -20px) rotate(6deg) scale(0.95);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+        }
+
+        @keyframes floatBook3 {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            20% {
+                transform: translate(25px, -15px) rotate(10deg);
+            }
+
+            40% {
+                transform: translate(-15px, -45px) rotate(-5deg);
+            }
+
+            60% {
+                transform: translate(10px, -35px) rotate(7deg);
+            }
+
+            80% {
+                transform: translate(-20px, -10px) rotate(-3deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+        }
+
+        @keyframes pageFlip {
+            0% {
+                transform: rotateY(0deg);
+            }
+
+            25% {
+                transform: rotateY(20deg);
+            }
+
+            50% {
+                transform: rotateY(0deg);
+            }
+
+            75% {
+                transform: rotateY(-20deg);
+            }
+
+            100% {
+                transform: rotateY(0deg);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: translateY(60px) scale(0.8);
+            }
+
+            60% {
+                opacity: 1;
+                transform: translateY(-10px) scale(1.02);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes swingBook {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(12deg);
+            }
+
+            50% {
+                transform: rotate(0deg);
+            }
+
+            75% {
+                transform: rotate(-12deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        /* Floating book elements in hero */
+        .hero-banner {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-book {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 1;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .fb-1 {
+            top: 10%;
+            left: 8%;
+            animation: floatBook1 6s ease-in-out infinite;
+        }
+
+        .fb-2 {
+            top: 15%;
+            right: 10%;
+            animation: floatBook2 8s ease-in-out infinite 0.5s;
+            font-size: 3rem;
+        }
+
+        .fb-3 {
+            bottom: 15%;
+            left: 12%;
+            animation: floatBook3 7s ease-in-out infinite 1s;
+        }
+
+        .fb-4 {
+            bottom: 20%;
+            right: 8%;
+            animation: floatBook1 9s ease-in-out infinite 1.5s;
+            font-size: 2rem;
+        }
+
+        .fb-5 {
+            top: 40%;
+            left: 3%;
+            animation: floatBook2 7.5s ease-in-out infinite 2s;
+            font-size: 2rem;
+        }
+
+        .fb-6 {
+            top: 35%;
+            right: 4%;
+            animation: floatBook3 6.5s ease-in-out infinite 0.8s;
+            font-size: 2.2rem;
+        }
+
+        .fb-7 {
+            bottom: 8%;
+            left: 35%;
+            animation: swingBook 4s ease-in-out infinite;
+            font-size: 1.8rem;
+        }
+
+        .fb-8 {
+            top: 8%;
+            left: 45%;
+            animation: floatBook1 8s ease-in-out infinite 3s;
+            font-size: 1.6rem;
+        }
+
+        .fb-9 {
+            bottom: 25%;
+            right: 25%;
+            animation: pageFlip 5s ease-in-out infinite;
+            font-size: 2.8rem;
+            perspective: 300px;
+        }
+
+        .fb-10 {
+            top: 55%;
+            right: 15%;
+            animation: floatBook2 6s ease-in-out infinite 2.5s;
+            font-size: 1.5rem;
+        }
+
+        /* Book section divider */
+        .book-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px 0;
+            margin: 10px 0;
+        }
+
+        .book-divider .divider-line {
+            height: 2px;
+            width: 80px;
+            background: linear-gradient(90deg, transparent, #4CAF50, transparent);
+        }
+
+        .book-divider .divider-icon {
+            font-size: 1.8rem;
+            animation: swingBook 3s ease-in-out infinite;
+        }
+
+        /* Animated product cards */
+        .product-card {
+            animation: bounceIn 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .product-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .product-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .product-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .product-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .product-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .product-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .product-card:nth-child(7) {
+            animation-delay: 0.7s;
+        }
+
+        .product-card:nth-child(8) {
+            animation-delay: 0.8s;
+        }
+
+        /* Shimmer effect on book images */
+        .product-card .book-img {
+            position: relative;
+        }
+
+        .product-card:hover .book-img {
+            filter: brightness(1.08);
+            transition: filter 0.3s ease;
+        }
+
+        /* Animated section titles */
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #4CAF50, #81C784);
+            border-radius: 3px;
+            animation: shimmer 2s linear infinite;
+            background-size: 200% 100%;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #764ba2;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Hero text should be above floating books */
+        .hero-banner h1,
+        .hero-banner h2,
+        .hero-banner p {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Category items bounce on scroll */
+        .cat-item {
+            animation: bounceIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .cat-item:nth-child(1) {
+            animation-delay: 0.15s;
+        }
+
+        .cat-item:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .cat-item:nth-child(3) {
+            animation-delay: 0.45s;
+        }
+
+        .cat-item:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+    </style>
+
+    <div id="chat-widget"
+        style="display: none; position: fixed; bottom: 90px; right: 25px; width: min(340px, calc(100vw - 50px)); background: #fff; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 10000; overflow: hidden; font-family: 'Segoe UI', sans-serif; transition: all 0.3s ease;">
+
+        <div
+            style="background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%); color: white; padding: 18px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div
+                    style="background: white; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    🤖</div>
+                <div>
+                    <div style="font-weight: bold; font-size: 15px;">BOOK4U AI</div>
+                    <div style="font-size: 11px; opacity: 0.9;">● Online & Ready</div>
+                </div>
+            </div>
+            <span onclick="toggleChat()" style="cursor: pointer; font-size: 20px; opacity: 0.8;">✕</span>
+        </div>
+
+        <div id="chat-messages"
+            style="max-height: 350px; min-height: 200px; overflow-y: auto; padding: 20px; background: #f4f7f6; display: flex; flex-direction: column; gap: 15px;">
+        </div>
+
+        <div style="padding: 15px; border-top: 1px solid #eee; background: white;">
+            <div style="position: relative;">
+                <input type="text" id="user-input" placeholder="Type your question..."
+                    style="width: 100%; padding: 14px 45px 14px 15px; border: 1px solid #e1e4e8; border-radius: 25px; outline: none; font-size: 14px; background: #f9f9f9; box-sizing: border-box;">
+                <button
+                    style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: #764ba2; color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center;">➤</button>
+            </div>
+            <div style="text-align: center; font-size: 10px; color: #999; margin-top: 8px;">Powered by Book4U AI</div>
+        </div>
+    </div>
+
+    <div id="chat-bubble" onclick="toggleChat()"
+        style="position: fixed; bottom: 90px; right: 30px; background: white; padding: 10px 15px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 9999; font-family: sans-serif; font-size: 14px; color: #333; cursor: pointer; animation: float 3s ease-in-out infinite;">
+        Need a book suggestion? 📚
+        <div
+            style="position: absolute; bottom: -8px; right: 20px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 8px solid white;">
+        </div>
+        <div onclick="event.stopPropagation(); document.getElementById('chat-bubble').style.display='none'"
+            style="position: absolute; top: -8px; right: -8px; background: #eee; color: #555; border-radius: 50%; width: 18px; height: 18px; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            ✕</div>
+    </div>
+
+    <button onclick="toggleChat()"
+        style="position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%); color: white; border: none; border-radius: 50%; box-shadow: 0 5px 20px rgba(76,175,80,0.4); cursor: pointer; z-index: 10000; font-size: 28px; display: flex; align-items: center; justify-content: center; animation: pulse-blue 2s infinite;">
+        💬
+    </button>
+
+    <script>
+        function toggleChat() {
+            const widget = document.getElementById('chat-widget');
+            const bubble = document.getElementById('chat-bubble');
+            if (widget.style.display === 'none' || widget.style.display === '') {
+                widget.style.display = 'block';
+                bubble.style.display = 'none';
+            } else {
+                widget.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>

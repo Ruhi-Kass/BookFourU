@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop - Book4U</title>
-    <link rel="stylesheet" href="style (1).css">
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* ── Shop Section ── */
@@ -616,7 +616,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="index (1).html" class="back-btn">← Back to Home</a></li>
+                <li><a href="index.html" class="back-btn">← Back to Home</a></li>
                 <li><a href="contact.html" class="nav-link">Contact Us</a></li>
                 <li><a href="mycart.html" class="nav-link">My Cart</a></li>
                 <li><a href="about.html" class="nav-link">About Us</a></li>
@@ -652,213 +652,190 @@
                 <button class="category-card" data-category="fiction">Fiction</button>
                 <button class="category-card" data-category="educational">Educational</button>
                 <button class="category-card" data-category="non-fiction">Non-Fiction</button>
-                <button class="category-card" data-category="anime">Anime Books</button>
+                <button class="category-card" data-category="anime mangas">anime mangass</button>
             </div>
 
             <div class="shop-container">
                 <div class="shop-products" id="shopProducts">
-                    <!-- Book 1 -->
-                    <div class="shop-card" data-category="fiction">
-                        <div class="shop-card-image">
-                            <img src="assets/book1.jpg" alt="The Great Adventure">
-                        </div>
-                        <div class="shop-card-content">
-                            <h4 class="shop-card-title">The Great Adventure</h4>
-                            <p class="shop-card-author">By John Smith</p>
-                            <p class="shop-card-description">An epic tale of courage and discovery. Follow protagonist
-                                Mark as he embarks on a journey across mystical lands.</p>
-                            <p class="shop-card-genre"><strong>Genre:</strong> Adventure, Fantasy |
-                                <strong>Pages:</strong> 324
-                            </p>
-                            <div class="shop-card-price">
-                                <span class="current-price">$9.99</span>
-                                <span class="original-price">$14.99</span>
-                            </div>
-                            <div class="shop-card-actions">
-                                <button class="add-to-cart-btn add-to-cart" data-id="1" data-title="The Great Adventure"
-                                    data-price="9.99" data-category="fiction">🛒 Add to Cart</button>
-                                <button class="buy-now-btn"
-                                    onclick="openSinglePayment('1','The Great Adventure',9.99)">🅿 Pay Now</button>
-                            </div>
-                        </div>
-                    </div>
+               <div class="shop-card" data-category="educational">
+    <div class="shop-card-image"><img src="assets/book1.jpg" alt="Learning Python"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">Learning Python</h4>
+        <p class="shop-card-author">By Sarah J.</p>
+        <p class="shop-card-description">Master Python programming from basics to advanced concepts with practical examples.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Education, Tech | <strong>Pages:</strong> 400</p>
+        <div class="shop-card-price"><span class="current-price">$14.99</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="1" data-title="Learning Python" data-price="14.99" data-category="educational">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('1','Learning Python',14.99)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
 
-                    <!-- Book 2 -->
-                    <div class="shop-card" data-category="educational">
-                        <div class="shop-card-image">
-                            <img src="assets/book2.jpg" alt="Learning Python">
-                        </div>
-                        <div class="shop-card-content">
-                            <h4 class="shop-card-title">Learning Python</h4>
-                            <p class="shop-card-author">By Sarah Johnson</p>
-                            <p class="shop-card-description">Master Python programming from basics to advanced concepts
-                                with practical examples and real-world projects.</p>
-                            <p class="shop-card-genre"><strong>Genre:</strong> Education, Technology |
-                                <strong>Pages:</strong> 456
-                            </p>
-                            <div class="shop-card-price">
-                                <span class="current-price">$14.99</span>
-                                <span class="original-price">$24.99</span>
-                            </div>
-                            <div class="shop-card-actions">
-                                <button class="add-to-cart-btn add-to-cart" data-id="2" data-title="Learning Python"
-                                    data-price="14.99" data-category="educational">🛒 Add to Cart</button>
-                                <button class="buy-now-btn" onclick="openSinglePayment('2','Learning Python',14.99)">🅿
-                                    Pay Now</button>
-                            </div>
-                        </div>
-                    </div>
+<div class="shop-card" data-category="educational">
+    <div class="shop-card-image"><img src="assets/book2.jpg" alt="Mastering Linux"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">Mastering Linux</h4>
+        <p class="shop-card-author">By Linus T.</p>
+        <p class="shop-card-description">The ultimate guide to understanding Linux kernels, terminal commands, and system security.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Education, OS | <strong>Pages:</strong> 350</p>
+        <div class="shop-card-price"><span class="current-price">$19.99</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="2" data-title="Mastering Linux" data-price="19.99" data-category="educational">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('2','Mastering Linux',19.99)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
 
-                    <!-- Book 3 -->
-                    <div class="shop-card" data-category="fiction">
-                        <div class="shop-card-image">
-                            <img src="assets/book3.jpg" alt="Mystery Island">
-                        </div>
-                        <div class="shop-card-content">
-                            <h4 class="shop-card-title">Mystery Island</h4>
-                            <p class="shop-card-author">By Mike Davis</p>
-                            <p class="shop-card-description">A gripping mystery thriller set on a secluded island.
-                                Uncover secrets and solve puzzles in this page-turner.</p>
-                            <p class="shop-card-genre"><strong>Genre:</strong> Mystery, Thriller |
-                                <strong>Pages:</strong> 298
-                            </p>
-                            <div class="shop-card-price">
-                                <span class="current-price">$19.99</span>
-                            </div>
-                            <div class="shop-card-actions">
-                                <button class="add-to-cart-btn add-to-cart" data-id="3" data-title="Mystery Island"
-                                    data-price="19.99" data-category="fiction">🛒 Add to Cart</button>
-                                <button class="buy-now-btn" onclick="openSinglePayment('3','Mystery Island',19.99)">🅿
-                                    Pay Now</button>
-                            </div>
-                        </div>
-                    </div>
+<div class="shop-card" data-category="educational">
+    <div class="shop-card-image"><img src="assets/book3.jpg" alt="Web Development 101"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">Web Development 101</h4>
+        <p class="shop-card-author">By Dev Team</p>
+        <p class="shop-card-description">Learn HTML, CSS, and JavaScript to build your very first responsive website from scratch.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Education, Web | <strong>Pages:</strong> 280</p>
+        <div class="shop-card-price"><span class="current-price">$12.99</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="3" data-title="Web Development 101" data-price="12.99" data-category="educational">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('3','Web Development 101',12.99)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
 
-                    <!-- Book 4 -->
-                    <div class="shop-card" data-category="educational">
-                        <div class="shop-card-image">
-                            <img src="assets/book4.jpg" alt="Science Explorer">
-                        </div>
-                        <div class="shop-card-content">
-                            <h4 class="shop-card-title">Science Explorer</h4>
-                            <p class="shop-card-author">By Emily Chen</p>
-                            <p class="shop-card-description">Discover the wonders of science through engaging
-                                experiments and fascinating facts.</p>
-                            <p class="shop-card-genre"><strong>Genre:</strong> Education, Science |
-                                <strong>Pages:</strong> 212
-                            </p>
-                            <div class="shop-card-price">
-                                <span class="current-price">$24.99</span>
-                                <span class="original-price">$34.99</span>
-                            </div>
-                            <div class="shop-card-actions">
-                                <button class="add-to-cart-btn add-to-cart" data-id="4" data-title="Science Explorer"
-                                    data-price="24.99" data-category="educational">🛒 Add to Cart</button>
-                                <button class="buy-now-btn" onclick="openSinglePayment('4','Science Explorer',24.99)">🅿
-                                    Pay Now</button>
-                            </div>
-                        </div>
-                    </div>
+<div class="shop-card" data-category="fiction">
+    <div class="shop-card-image"><img src="assets/book4.jpg" alt="The Silent Forest"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">The Silent Forest</h4>
+        <p class="shop-card-author">By Emma Woods</p>
+        <p class="shop-card-description">A thrilling mystery thriller set on a secluded island. Uncover secrets and solve puzzles.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Mystery, Thriller | <strong>Pages:</strong> 320</p>
+        <div class="shop-card-price"><span class="current-price">$11.99</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="4" data-title="The Silent Forest" data-price="11.99" data-category="fiction">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('4','The Silent Forest',11.99)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
 
-                    <!-- Book 5 -->
-                    <div class="shop-card" data-category="non-fiction">
-                        <div class="shop-card-image">
-                            <img src="assets/book5.webp" alt="History Uncovered">
-                        </div>
-                        <div class="shop-card-content">
-                            <h4 class="shop-card-title">History Uncovered</h4>
-                            <p class="shop-card-author">By Robert Brown</p>
-                            <p class="shop-card-description">Explore untold stories from history that shaped our world.
-                                A comprehensive journey through time.</p>
-                            <p class="shop-card-genre"><strong>Genre:</strong> History, Non-Fiction |
-                                <strong>Pages:</strong> 387
-                            </p>
-                            <div class="shop-card-price">
-                                <span class="current-price">$12.99</span>
-                                <span class="original-price">$19.99</span>
-                            </div>
-                            <div class="shop-card-actions">
-                                <button class="add-to-cart-btn add-to-cart" data-id="5" data-title="History Uncovered"
-                                    data-price="12.99" data-category="non-fiction">🛒 Add to Cart</button>
-                                <button class="buy-now-btn"
-                                    onclick="openSinglePayment('5','History Uncovered',12.99)">🅿 Pay Now</button>
-                            </div>
-                        </div>
-                    </div>
+<div class="shop-card" data-category="fiction">
+    <div class="shop-card-image"><img src="assets/book5.jpg" alt="Echoes of Time"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">Echoes of Time</h4>
+        <p class="shop-card-author">By Arthur C.</p>
+        <p class="shop-card-description">An epic tale of courage and discovery as a traveler journeys across different historical eras.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Sci-Fi, Adventure | <strong>Pages:</strong> 410</p>
+        <div class="shop-card-price"><span class="current-price">$15.50</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="5" data-title="Echoes of Time" data-price="15.50" data-category="fiction">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('5','Echoes of Time',15.50)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
 
-                    <!-- Book 6 - Anime -->
-                    <div class="shop-card" data-category="anime">
-                        <div class="shop-card-image">
-                            <img src="assets/book6.png" alt="Anime Legends Vol.1">
-                        </div>
-                        <div class="shop-card-content">
-                            <h4 class="shop-card-title">Anime Legends Vol.1</h4>
-                            <p class="shop-card-author">By Kenji Tanaka</p>
-                            <p class="shop-card-description">A stunning manga-style adventure across alternate worlds
-                                with breathtaking artwork.</p>
-                            <p class="shop-card-genre"><strong>Genre:</strong> Anime, Fiction | <strong>Pages:</strong>
-                                220</p>
-                            <div class="shop-card-price">
-                                <span class="current-price">$16.99</span>
-                            </div>
-                            <div class="shop-card-actions">
-                                <button class="add-to-cart-btn add-to-cart" data-id="6" data-title="Anime Legends Vol.1"
-                                    data-price="16.99" data-category="anime">🛒 Add to Cart</button>
-                                <button class="buy-now-btn"
-                                    onclick="openSinglePayment('6','Anime Legends Vol.1',16.99)">🅿 Pay Now</button>
-                            </div>
-                        </div>
-                    </div>
+<div class="shop-card" data-category="fiction">
+    <div class="shop-card-image"><img src="assets/book6.jpg" alt="The Last Hero"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">The Last Hero</h4>
+        <p class="shop-card-author">By Jack Black</p>
+        <p class="shop-card-description">In a world falling to darkness, one unlikely hero rises to face an ancient, forgotten magic.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Fantasy, Action | <strong>Pages:</strong> 290</p>
+        <div class="shop-card-price"><span class="current-price">$13.99</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="6" data-title="The Last Hero" data-price="13.99" data-category="fiction">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('6','The Last Hero',13.99)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
 
-                    <!-- Book 7 - Anime -->
-                    <div class="shop-card" data-category="anime">
-                        <div class="shop-card-image">
-                            <img src="assets/book1.jpg" alt="Attack on Knowledge">
-                        </div>
-                        <div class="shop-card-content">
-                            <h4 class="shop-card-title">Attack on Knowledge</h4>
-                            <p class="shop-card-author">By Hiro Matsuda</p>
-                            <p class="shop-card-description">Action-packed anime universe book collection blending epic
-                                battles with deep storytelling.</p>
-                            <p class="shop-card-genre"><strong>Genre:</strong> Anime, Action | <strong>Pages:</strong>
-                                200</p>
-                            <div class="shop-card-price">
-                                <span class="current-price">$14.50</span>
-                                <span class="original-price">$18.99</span>
-                            </div>
-                            <div class="shop-card-actions">
-                                <button class="add-to-cart-btn add-to-cart" data-id="7" data-title="Attack on Knowledge"
-                                    data-price="14.50" data-category="anime">🛒 Add to Cart</button>
-                                <button class="buy-now-btn"
-                                    onclick="openSinglePayment('7','Attack on Knowledge',14.50)">🅿 Pay Now</button>
-                            </div>
-                        </div>
-                    </div>
+<div class="shop-card" data-category="non-fiction">
+    <div class="shop-card-image"><img src="assets/book7.jpg" alt="History Uncovered"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">History Uncovered</h4>
+        <p class="shop-card-author">By Robert B.</p>
+        <p class="shop-card-description">Explore untold stories from history that shaped our world. A comprehensive journey through time.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> History, Biography | <strong>Pages:</strong> 380</p>
+        <div class="shop-card-price"><span class="current-price">$16.99</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="7" data-title="History Uncovered" data-price="16.99" data-category="non-fiction">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('7','History Uncovered',16.99)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
 
-                    <!-- Book 8 -->
-                    <div class="shop-card" data-category="educational">
-                        <div class="shop-card-image">
-                            <img src="assets/book2.jpg" alt="Coding 101">
-                        </div>
-                        <div class="shop-card-content">
-                            <h4 class="shop-card-title">Coding 101</h4>
-                            <p class="shop-card-author">By Jane Doe</p>
-                            <p class="shop-card-description">Beginner-friendly coding guide that takes you from zero to
-                                programmer in simple steps.</p>
-                            <p class="shop-card-genre"><strong>Genre:</strong> Education, Programming |
-                                <strong>Pages:</strong> 310
-                            </p>
-                            <div class="shop-card-price">
-                                <span class="current-price">$19.99</span>
-                            </div>
-                            <div class="shop-card-actions">
-                                <button class="add-to-cart-btn add-to-cart" data-id="8" data-title="Coding 101"
-                                    data-price="19.99" data-category="educational">🛒 Add to Cart</button>
-                                <button class="buy-now-btn" onclick="openSinglePayment('8','Coding 101',19.99)">🅿 Pay
-                                    Now</button>
-                            </div>
-                        </div>
-                    </div>
+<div class="shop-card" data-category="non-fiction">
+    <div class="shop-card-image"><img src="assets/book8.jpg" alt="Atomic Habits"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">Atomic Habits</h4>
+        <p class="shop-card-author">By James Clear</p>
+        <p class="shop-card-description">An easy and proven way to build good habits and break bad ones through small, daily changes.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Self-Help, Psychology | <strong>Pages:</strong> 320</p>
+        <div class="shop-card-price"><span class="current-price">$18.00</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="8" data-title="Atomic Habits" data-price="18.00" data-category="non-fiction">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('8','Atomic Habits',18.00)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
+
+<div class="shop-card" data-category="non-fiction">
+    <div class="shop-card-image"><img src="assets/book9.jpg" alt="Deep Work"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">Deep Work</h4>
+        <p class="shop-card-author">By Cal Newport</p>
+        <p class="shop-card-description">Master the art of focused success in a distracted world and produce better results in less time.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Business, Productivity | <strong>Pages:</strong> 300</p>
+        <div class="shop-card-price"><span class="current-price">$17.50</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="9" data-title="Deep Work" data-price="17.50" data-category="non-fiction">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('9','Deep Work',17.50)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
+
+<div class="shop-card" data-category="anime mangas">
+    <div class="shop-card-image"><img src="assets/book10.jpg" alt="Jujutsu Battles Vol 1"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">Jujutsu Battles Vol 1</h4>
+        <p class="shop-card-author">By Gege A.</p>
+        <p class="shop-card-description">A world of curses, sorcerers, and epic fights. Join the battle to protect humanity from dark spirits.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Manga, Action | <strong>Pages:</strong> 200</p>
+        <div class="shop-card-price"><span class="current-price">$9.99</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="10" data-title="Jujutsu Battles Vol 1" data-price="9.99" data-category="anime mangas">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('10','Jujutsu Battles Vol 1',9.99)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
+
+<div class="shop-card" data-category="anime mangas">
+    <div class="shop-card-image"><img src="assets/book11.jpg" alt="Ninja Chronicles"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">Ninja Chronicles</h4>
+        <p class="shop-card-author">By Masashi K.</p>
+        <p class="shop-card-description">Follow the journey of a young ninja as he trains to become the strongest warrior in his village.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Manga, Adventure | <strong>Pages:</strong> 190</p>
+        <div class="shop-card-price"><span class="current-price">$8.99</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="11" data-title="Ninja Chronicles" data-price="8.99" data-category="anime mangas">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('11','Ninja Chronicles',8.99)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
+
+<div class="shop-card" data-category="anime mangas">
+    <div class="shop-card-image"><img src="assets/book12.jpg" alt="Hero Academy"></div>
+    <div class="shop-card-content">
+        <h4 class="shop-card-title">Hero Academy</h4>
+        <p class="shop-card-author">By Kohei H.</p>
+        <p class="shop-card-description">In a world where everyone has superpowers, one boy without any power fights to enter the top academy.</p>
+        <p class="shop-card-genre"><strong>Genre:</strong> Manga, Shonen | <strong>Pages:</strong> 210</p>
+        <div class="shop-card-price"><span class="current-price">$10.50</span></div>
+        <div class="shop-card-actions">
+            <button class="add-to-cart-btn add-to-cart" data-id="12" data-title="Hero Academy" data-price="10.50" data-category="anime mangas">🛒 Add to Cart</button>
+            <button class="buy-now-btn" onclick="openSinglePayment('12','Hero Academy',10.50)">🅿 Pay Now</button>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
@@ -951,7 +928,7 @@
         </div>
     </div>
 
-    <script src="script (1).js"></script>
+    <script src="script.js"></script>
     <script>
         // ── Single-Book Payment State ──
         let _smBookId = '', _smBookTitle = '', _smBookPrice = 0;
