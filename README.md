@@ -91,16 +91,16 @@ BOOK4U/
 ├── assets/             # Images and logos
 ├── data/               # Static data files
 ├── node_modules/       # Dependencies
-├── index (1).html      # Home Page
+├── index.html      # Home Page
 ├── shop.html           # Shop & Product Listing
 ├── mycart.html         # Shopping Cart
 ├── login.html          # Login Page
 ├── signup.html         # Registration Page
 ├── contact.html        # Contact Page
 ├── about.html          # About Us Page
-├── script (1).js       # Main Frontend Logic
+├── script.js       # Main Frontend Logic
 ├── server.js           # Node.js Express Backend
-├── style (1).css       # Global Stylesheet
+├── style.css       # Global Stylesheet
 └── reset_db.js         # Database Utility Script
 ```
 

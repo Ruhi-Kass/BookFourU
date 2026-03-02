@@ -4,6 +4,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 const path = require('path');
 const crypto = require('crypto');
 const OpenAI = require('openai');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const app = express();
 const port = 3000;
@@ -16,15 +17,10 @@ function hashPassword(password) {
 }
 
 // ==========================================
-//  AI CLIENT (xAI)
+//  AI CLIENT (Google Gemini)
 // ==========================================
-let aiClient;
-const XAI_API_KEY = process.env.XAI_API_KEY || process.env.GROQ_API_KEY;
-if (XAI_API_KEY) {
-    aiClient = new OpenAI({ apiKey: XAI_API_KEY, baseURL: "https://api.x.ai/v1" });
-} else {
-    console.warn("WARNING: XAI_API_KEY missing. AI features disabled.");
-}
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const aiModel = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 // ==========================================
 //  MONGODB CONNECTION
@@ -72,15 +68,26 @@ async function initDB() {
         const bookCount = await getCol('books').countDocuments();
         if (bookCount === 0) {
             const books = [
-                { bookId: '1', title: 'The Great Adventure', author: 'John Smith', category: 'fiction', price: 9.99, originalPrice: 14.99, badge: 'BESTSELLER', pages: 324, description: 'An epic tale of courage and discovery.' },
-                { bookId: '2', title: 'Learning Python', author: 'Sarah Johnson', category: 'educational', price: 14.99, originalPrice: 24.99, pages: 456, description: 'Master Python from basics to advanced.' },
-                { bookId: '3', title: 'Mystery Island', author: 'Mike Davis', category: 'fiction', price: 19.99, badge: 'NEW', pages: 298, description: 'A gripping mystery thriller set on a secluded island.' },
-                { bookId: '4', title: 'Science Explorer', author: 'Emily Chen', category: 'educational', price: 24.99, originalPrice: 34.99, pages: 212, description: 'Discover the wonders of science.' },
-                { bookId: '5', title: 'History Uncovered', author: 'Robert Brown', category: 'non-fiction', price: 12.99, originalPrice: 19.99, badge: 'SALE', pages: 387, description: 'Explore untold stories from history.' },
-                { bookId: '6', title: 'Anime Legends Vol.1', author: 'Kenji Tanaka', category: 'anime', price: 16.99, badge: 'NEW', pages: 220, description: 'A stunning manga-style adventure across alternate worlds.' },
-                { bookId: '7', title: 'Attack on Knowledge', author: 'Hiro Matsuda', category: 'anime', price: 14.50, originalPrice: 18.99, pages: 200, description: 'Action-packed anime universe book collection.' },
-                { bookId: '8', title: 'Coding 101', author: 'Jane Doe', category: 'educational', price: 19.99, pages: 310, description: 'Beginner-friendly coding guide for everyone.' },
-            ];
+            // 📚 EDUCATIONAL (3 Books)
+            { bookId: '1', title: 'Learning Python', author: 'Sarah J.', category: 'educational', price: 14.99, pages: 400, description: 'Master Python from scratch.' },
+            { bookId: '2', title: 'Mastering Linux', author: 'Linus T.', category: 'educational', price: 19.99, pages: 350, description: 'The ultimate guide to Linux systems.' },
+            { bookId: '3', title: 'Web Development 101', author: 'Dev Team', category: 'educational', price: 12.99, pages: 280, description: 'Build your first website.' },
+            
+            // 📖 FICTION (3 Books)
+            { bookId: '4', title: 'The Silent Forest', author: 'Emma Woods', category: 'fiction', price: 11.99, pages: 320, description: 'A thrilling mystery in the woods.' },
+            { bookId: '5', title: 'Echoes of Time', author: 'Arthur C.', category: 'fiction', price: 15.50, pages: 410, description: 'A journey across different eras.' },
+            { bookId: '6', title: 'The Last Hero', author: 'Jack Black', category: 'fiction', price: 13.99, pages: 290, description: 'An epic fantasy adventure.' },
+            
+            // 📕 NON-FICTION (3 Books)
+            { bookId: '7', title: 'History Uncovered', author: 'Robert B.', category: 'non-fiction', price: 16.99, pages: 380, description: 'Untold stories from the past.' },
+            { bookId: '8', title: 'Atomic Habits', author: 'James Clear', category: 'non-fiction', price: 18.00, pages: 320, description: 'Build good habits and break bad ones.' },
+            { bookId: '9', title: 'Deep Work', author: 'Cal Newport', category: 'non-fiction', price: 17.50, pages: 300, description: 'Rules for focused success.' },
+            
+            // 🎌 anime mangas (3 Books)
+            { bookId: '10', title: 'Jujutsu Battles Vol 1', author: 'Gege A.', category: 'anime mangas', price: 9.99, pages: 200, description: 'Curses, sorcerers, and epic fights.' },
+            { bookId: '11', title: 'Ninja Chronicles', author: 'Masashi K.', category: 'anime mangas', price: 8.99, pages: 190, description: 'The journey of a young ninja.' },
+            { bookId: '12', title: 'Hero Academy', author: 'Kohei H.', category: 'anime mangas', price: 10.50, pages: 210, description: 'A world where everyone has superpowers.' }
+        ];
             await getCol('books').insertMany(books);
             console.log('Books collection seeded.');
         }
@@ -103,39 +110,55 @@ async function initDB() {
 }
 
 // ==========================================
-//  AI CHATBOT
+//  AI CHATBOT (Powered by Gemini + Live Database)
 // ==========================================
 app.post('/chat', async (req, res) => {
     const userMessage = req.body.message;
-    if (!userMessage) return res.status(400).json({ reply: "Please say something!" });
-    try {
-        if (!aiClient) return res.status(503).json({ reply: "AI not configured (missing API key)." });
-        const completion = await aiClient.chat.completions.create({
-            messages: [
-                { role: "system", content: "You are a helpful assistant for BOOK4U bookstore. Answer in 2-3 sentences max. Be concise and friendly." },
-                { role: "user", content: userMessage }
-            ],
-            model: "grok-beta",
-        });
-        res.json({ reply: completion.choices[0]?.message?.content || "I'm not sure." });
-    } catch (error) {
-        console.error("AI Error:", error.message);
-        res.status(500).json({ reply: "Error connecting to AI." });
-    }
-});
+    const pageContext = req.body.context || "General Page";
 
-// ==========================================
-//  USER STATS
-// ==========================================
-app.get('/api/stats', async (req, res) => {
+    if (!userMessage) return res.status(400).json({ reply: "Please say something!" });
+
     try {
-        await connectDB();
-        const userCount = await getCol('users').countDocuments();
-        const bookCount = await getCol('books').countDocuments();
-        const cartCount = await getCol('carts').countDocuments();
-        res.json({ userCount, bookCount, cartCount });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        if (!process.env.GEMINI_API_KEY) {
+            return res.status(503).json({ reply: "AI not configured." });
+        }
+
+        // --- STEP 1: FETCH LIVE BOOKS FROM MONGODB ---
+        await connectDB(); // Make sure database is connected
+        const liveBooks = await getCol('books').find({}).toArray();
+        
+        // Format the books into a readable list for the AI (e.g., "- The Great Adventure ($9.99)")
+        const bookListString = liveBooks.map(book => 
+            `- ${book.title} by ${book.author} (Category: ${book.category}, Price: $${book.price})`
+        ).join('\n');
+        // ---------------------------------------------
+
+        // --- STEP 2: BUILD THE SMART PROMPT ---
+        const systemInstruction = `
+        You are the official, friendly AI shopping assistant for 'BOOK4U'.
+
+        YOUR LIVE INVENTORY (Do not make up books, only recommend from this list):
+        ${bookListString}
+
+        YOUR STRICT RULES:
+        1. BE PROACTIVE: If a user wants a recommendation but doesn't specify a genre, ask them: "What kind of genres are you usually interested in?"
+        2. CONCISE: Keep your answers brief and friendly (2-3 sentences max).
+        3. GUARDRAILS: Only answer questions related to books, reading, or the BOOK4U website.
+
+        The user is currently looking at this context/page: ${pageContext}.
+        `;
+
+        const prompt = `${systemInstruction}\n\nUser asks: ${userMessage}`;
+
+        // --- STEP 3: SEND TO GEMINI ---
+        const result = await aiModel.generateContent(prompt);
+        const response = await result.response;
+
+        res.json({ reply: response.text() });
+
+    } catch (error) {
+        console.error("Gemini AI Error:", error.message);
+        res.status(500).json({ reply: "Error connecting to AI." });
     }
 });
 
@@ -507,7 +530,7 @@ app.delete('/api/admin/books/:id', requireAdmin, async (req, res) => {
 //  STATIC ROUTES
 // ==========================================
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index (1).html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // ==========================================
