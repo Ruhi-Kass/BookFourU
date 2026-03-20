@@ -5,8 +5,11 @@ const path = require('path');
 const crypto = require('crypto');
 const OpenAI = require('openai');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const cookieParser = require("cookie-parser");
 
 const app = express();
+app.use(cookieParser());
+
 const port = 3000;
 
 // ==========================================
@@ -48,7 +51,7 @@ function getCol(name) {
 // ==========================================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname), { index: false }));
 
 // ==========================================
 //  DATABASE INITIALIZATION
@@ -68,26 +71,26 @@ async function initDB() {
         const bookCount = await getCol('books').countDocuments();
         if (bookCount === 0) {
             const books = [
-            // 📚 EDUCATIONAL (3 Books)
-            { bookId: '1', title: 'Learning Python', author: 'Sarah J.', category: 'educational', price: 14.99, pages: 400, description: 'Master Python from scratch.' },
-            { bookId: '2', title: 'Mastering Linux', author: 'Linus T.', category: 'educational', price: 19.99, pages: 350, description: 'The ultimate guide to Linux systems.' },
-            { bookId: '3', title: 'Web Development 101', author: 'Dev Team', category: 'educational', price: 12.99, pages: 280, description: 'Build your first website.' },
-            
-            // 📖 FICTION (3 Books)
-            { bookId: '4', title: 'The Silent Forest', author: 'Emma Woods', category: 'fiction', price: 11.99, pages: 320, description: 'A thrilling mystery in the woods.' },
-            { bookId: '5', title: 'Echoes of Time', author: 'Arthur C.', category: 'fiction', price: 15.50, pages: 410, description: 'A journey across different eras.' },
-            { bookId: '6', title: 'The Last Hero', author: 'Jack Black', category: 'fiction', price: 13.99, pages: 290, description: 'An epic fantasy adventure.' },
-            
-            // 📕 NON-FICTION (3 Books)
-            { bookId: '7', title: 'History Uncovered', author: 'Robert B.', category: 'non-fiction', price: 16.99, pages: 380, description: 'Untold stories from the past.' },
-            { bookId: '8', title: 'Atomic Habits', author: 'James Clear', category: 'non-fiction', price: 18.00, pages: 320, description: 'Build good habits and break bad ones.' },
-            { bookId: '9', title: 'Deep Work', author: 'Cal Newport', category: 'non-fiction', price: 17.50, pages: 300, description: 'Rules for focused success.' },
-            
-            // 🎌 anime mangas (3 Books)
-            { bookId: '10', title: 'Jujutsu Battles Vol 1', author: 'Gege A.', category: 'anime mangas', price: 9.99, pages: 200, description: 'Curses, sorcerers, and epic fights.' },
-            { bookId: '11', title: 'Ninja Chronicles', author: 'Masashi K.', category: 'anime mangas', price: 8.99, pages: 190, description: 'The journey of a young ninja.' },
-            { bookId: '12', title: 'Hero Academy', author: 'Kohei H.', category: 'anime mangas', price: 10.50, pages: 210, description: 'A world where everyone has superpowers.' }
-        ];
+                // 📚 EDUCATIONAL (3 Books)
+                { bookId: '1', title: 'Learning Python', author: 'Sarah J.', category: 'educational', price: 14.99, pages: 400, description: 'Master Python from scratch.' },
+                { bookId: '2', title: 'Mastering Linux', author: 'Linus T.', category: 'educational', price: 19.99, pages: 350, description: 'The ultimate guide to Linux systems.' },
+                { bookId: '3', title: 'Web Development 101', author: 'Dev Team', category: 'educational', price: 12.99, pages: 280, description: 'Build your first website.' },
+
+                // 📖 FICTION (3 Books)
+                { bookId: '4', title: 'The Silent Forest', author: 'Emma Woods', category: 'fiction', price: 11.99, pages: 320, description: 'A thrilling mystery in the woods.' },
+                { bookId: '5', title: 'Echoes of Time', author: 'Arthur C.', category: 'fiction', price: 15.50, pages: 410, description: 'A journey across different eras.' },
+                { bookId: '6', title: 'The Last Hero', author: 'Jack Black', category: 'fiction', price: 13.99, pages: 290, description: 'An epic fantasy adventure.' },
+
+                // 📕 NON-FICTION (3 Books)
+                { bookId: '7', title: 'History Uncovered', author: 'Robert B.', category: 'non-fiction', price: 16.99, pages: 380, description: 'Untold stories from the past.' },
+                { bookId: '8', title: 'Atomic Habits', author: 'James Clear', category: 'non-fiction', price: 18.00, pages: 320, description: 'Build good habits and break bad ones.' },
+                { bookId: '9', title: 'Deep Work', author: 'Cal Newport', category: 'non-fiction', price: 17.50, pages: 300, description: 'Rules for focused success.' },
+
+                // 🎌 anime mangas (3 Books)
+                { bookId: '10', title: 'Jujutsu Battles Vol 1', author: 'Gege A.', category: 'anime mangas', price: 9.99, pages: 200, description: 'Curses, sorcerers, and epic fights.' },
+                { bookId: '11', title: 'Ninja Chronicles', author: 'Masashi K.', category: 'anime mangas', price: 8.99, pages: 190, description: 'The journey of a young ninja.' },
+                { bookId: '12', title: 'Hero Academy', author: 'Kohei H.', category: 'anime mangas', price: 10.50, pages: 210, description: 'A world where everyone has superpowers.' }
+            ];
             await getCol('books').insertMany(books);
             console.log('Books collection seeded.');
         }
@@ -112,7 +115,7 @@ async function initDB() {
 // ==========================================
 //  AI CHATBOT (Powered by Gemini + Live Database)
 // ==========================================
-app.post('/chat', async (req, res) => {
+app.post('/chat', async(req, res) => {
     const userMessage = req.body.message;
     const pageContext = req.body.context || "General Page";
 
@@ -126,9 +129,9 @@ app.post('/chat', async (req, res) => {
         // --- STEP 1: FETCH LIVE BOOKS FROM MONGODB ---
         await connectDB(); // Make sure database is connected
         const liveBooks = await getCol('books').find({}).toArray();
-        
+
         // Format the books into a readable list for the AI (e.g., "- The Great Adventure ($9.99)")
-        const bookListString = liveBooks.map(book => 
+        const bookListString = liveBooks.map(book =>
             `- ${book.title} by ${book.author} (Category: ${book.category}, Price: $${book.price})`
         ).join('\n');
         // ---------------------------------------------
@@ -165,7 +168,7 @@ app.post('/chat', async (req, res) => {
 // ==========================================
 //  BOOKS ENDPOINTS
 // ==========================================
-app.get('/api/books', async (req, res) => {
+app.get('/api/books', async(req, res) => {
     try {
         await connectDB();
         const books = await getCol('books').find({}).toArray();
@@ -178,7 +181,7 @@ app.get('/api/books', async (req, res) => {
 // ==========================================
 //  AUTH: REGISTER
 // ==========================================
-app.post('/api/register', async (req, res) => {
+app.post('/api/register', async(req, res) => {
     try {
         await connectDB();
         const { fullname, username, email, address, password, confirmPassword } = req.body;
@@ -232,6 +235,7 @@ app.post('/api/register', async (req, res) => {
             address: address.trim(),
             password: hashedPw,
             cartBookCount: 0,
+            viewedCategories: [],
             createdAt: new Date().toISOString()
         };
 
@@ -256,7 +260,7 @@ app.post('/api/register', async (req, res) => {
 // ==========================================
 //  AUTH: LOGIN
 // ==========================================
-app.post('/api/login', async (req, res) => {
+app.post('/api/login', async(req, res) => {
     try {
         await connectDB();
         const { email, password } = req.body;
@@ -300,7 +304,7 @@ app.post('/api/login', async (req, res) => {
 // ==========================================
 
 // Add book to cart
-app.post('/api/cart/add', async (req, res) => {
+app.post('/api/cart/add', async(req, res) => {
     try {
         await connectDB();
         const { userId, bookId, bookTitle, bookCategory, bookPrice } = req.body;
@@ -321,10 +325,7 @@ app.post('/api/cart/add', async (req, res) => {
         await getCol('carts').insertOne(cartItem);
 
         // Update user's cartBookCount
-        await getCol('users').updateOne(
-            { _id: new ObjectId(userId) },
-            { $inc: { cartBookCount: 1 } }
-        );
+        await getCol('users').updateOne({ _id: new ObjectId(userId) }, { $inc: { cartBookCount: 1 } });
 
         // Get updated cart count
         const cartCount = await getCol('carts').countDocuments({ userId });
@@ -337,7 +338,7 @@ app.post('/api/cart/add', async (req, res) => {
 });
 
 // Get user's cart
-app.get('/api/cart/:userId', async (req, res) => {
+app.get('/api/cart/:userId', async(req, res) => {
     try {
         await connectDB();
         const { userId } = req.params;
@@ -350,7 +351,7 @@ app.get('/api/cart/:userId', async (req, res) => {
 });
 
 // Remove item from cart
-app.delete('/api/cart/remove/:itemId', async (req, res) => {
+app.delete('/api/cart/remove/:itemId', async(req, res) => {
     try {
         await connectDB();
         const { itemId } = req.params;
@@ -359,10 +360,7 @@ app.delete('/api/cart/remove/:itemId', async (req, res) => {
         const result = await getCol('carts').deleteOne({ _id: new ObjectId(itemId) });
 
         if (result.deletedCount > 0 && userId) {
-            await getCol('users').updateOne(
-                { _id: new ObjectId(userId) },
-                { $inc: { cartBookCount: -1 } }
-            );
+            await getCol('users').updateOne({ _id: new ObjectId(userId) }, { $inc: { cartBookCount: -1 } });
         }
 
         res.json({ success: true, message: 'Item removed from cart' });
@@ -372,15 +370,12 @@ app.delete('/api/cart/remove/:itemId', async (req, res) => {
 });
 
 // Clear entire cart (after checkout)
-app.delete('/api/cart/clear/:userId', async (req, res) => {
+app.delete('/api/cart/clear/:userId', async(req, res) => {
     try {
         await connectDB();
         const { userId } = req.params;
         await getCol('carts').deleteMany({ userId });
-        await getCol('users').updateOne(
-            { _id: new ObjectId(userId) },
-            { $set: { cartBookCount: 0 } }
-        );
+        await getCol('users').updateOne({ _id: new ObjectId(userId) }, { $set: { cartBookCount: 0 } });
         res.json({ success: true, message: 'Cart cleared' });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
@@ -390,7 +385,7 @@ app.delete('/api/cart/clear/:userId', async (req, res) => {
 // ==========================================
 //  PURCHASE / TRANSACTION
 // ==========================================
-app.post('/api/purchase', async (req, res) => {
+app.post('/api/purchase', async(req, res) => {
     try {
         await connectDB();
         const { userId, transactionId, cartItems, total } = req.body;
@@ -413,10 +408,7 @@ app.post('/api/purchase', async (req, res) => {
         // Clear user's cart in DB if logged in
         if (userId) {
             await getCol('carts').deleteMany({ userId });
-            await getCol('users').updateOne(
-                { _id: new ObjectId(userId) },
-                { $set: { cartBookCount: 0 } }
-            );
+            await getCol('users').updateOne({ _id: new ObjectId(userId) }, { $set: { cartBookCount: 0 } });
         }
 
         res.json({ success: true, message: 'Purchase confirmed!', transactionId });
@@ -429,7 +421,7 @@ app.post('/api/purchase', async (req, res) => {
 // ==========================================
 //  USERS LIST (for admin visibility)
 // ==========================================
-app.get('/api/users', async (req, res) => {
+app.get('/api/users', async(req, res) => {
     try {
         await connectDB();
         const users = await getCol('users').find({}, { projection: { password: 0 } }).toArray();
@@ -443,6 +435,7 @@ app.get('/api/users', async (req, res) => {
 //  ADMIN API
 // ==========================================
 const ADMIN_KEY = 'book4u@admin2024';
+
 function requireAdmin(req, res, next) {
     if (req.headers['x-admin-key'] !== ADMIN_KEY) {
         return res.status(401).json({ success: false, message: 'Unauthorized' });
@@ -451,7 +444,7 @@ function requireAdmin(req, res, next) {
 }
 
 // Admin Login (verifies against admins collection in DB)
-app.post('/api/admin/login', async (req, res) => {
+app.post('/api/admin/login', async(req, res) => {
     try {
         await connectDB();
         const { username, password } = req.body;
@@ -471,7 +464,7 @@ app.post('/api/admin/login', async (req, res) => {
 });
 
 // Add a book (admin only)
-app.post('/api/admin/books', requireAdmin, async (req, res) => {
+app.post('/api/admin/books', requireAdmin, async(req, res) => {
     try {
         await connectDB();
         const { title, author, price, origPrice, category, pages, badge, imageUrl, image, description } = req.body;
@@ -505,7 +498,7 @@ app.post('/api/admin/books', requireAdmin, async (req, res) => {
 });
 
 // Delete a book (admin only)
-app.delete('/api/admin/books/:id', requireAdmin, async (req, res) => {
+app.delete('/api/admin/books/:id', requireAdmin, async(req, res) => {
     try {
         await connectDB();
         const { id } = req.params;
@@ -526,11 +519,150 @@ app.delete('/api/admin/books/:id', requireAdmin, async (req, res) => {
     }
 });
 
+app.get('/', async(req, res) => {
+    try {
+        await connectDB();
+
+        let userId = req.cookies.userId;
+
+        if (!userId) {
+            const result = await getCol('users').insertOne({
+                viewedCategories: [],
+                createdAt: new Date().toISOString()
+            });
+
+            userId = result.insertedId.toString();
+
+            res.cookie("userId", userId, {
+                httpOnly: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+        }
+
+        res.sendFile(path.join(__dirname, 'index.html'));
+    } catch (err) {
+        console.error("Home error:", err.message);
+        res.status(500).send("Server error");
+    }
+});
+app.get('/', async(req, res) => {
+    try {
+        await connectDB();
+
+        console.log("HOME ROUTE HIT"); // 👈 ADD THIS
+
+        let userId = req.cookies?.userId;
+
+        if (!userId) {
+            console.log("CREATING COOKIE"); // 👈 ADD THIS
+
+            const result = await getCol('users').insertOne({
+                viewedCategories: [],
+                createdAt: new Date().toISOString()
+            });
+
+            userId = result.insertedId.toString();
+
+            res.cookie("userId", userId, {
+                httpOnly: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+        }
+
+        res.sendFile(path.join(__dirname, 'index.html'));
+    } catch (err) {
+        console.error("Home error:", err.message);
+        res.status(500).send("Server error");
+    }
+});
+app.get('/', async(req, res) => {
+    try {
+        await connectDB();
+
+        console.log("HOME ROUTE HIT"); // 👈 ADD THIS
+
+        let userId = req.cookies?.userId;
+
+        if (!userId) {
+            console.log("CREATING COOKIE"); // 👈 ADD THIS
+
+            const result = await getCol('users').insertOne({
+                viewedCategories: [],
+                createdAt: new Date().toISOString()
+            });
+
+            userId = result.insertedId.toString();
+
+            res.cookie("userId", userId, {
+                httpOnly: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+        }
+
+        res.sendFile(path.join(__dirname, 'index.html'));
+    } catch (err) {
+        console.error("Home error:", err.message);
+        res.status(500).send("Server error");
+    }
+});
 // ==========================================
-//  STATIC ROUTES
+//  TRACK BOOK VIEW
 // ==========================================
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+app.post("/api/track-view", async(req, res) => {
+    try {
+        await connectDB();
+
+        const { category } = req.body;
+        const userId = req.cookies.userId;
+
+        if (!category || !userId) {
+            return res.json({ success: false });
+        }
+
+        await getCol('users').updateOne({ _id: new ObjectId(userId) }, { $push: { viewedCategories: category } });
+
+        res.json({ success: true });
+
+    } catch (err) {
+        console.error("Track view error:", err.message);
+        res.status(500).json({ success: false });
+    }
+});
+// ==========================================
+//  RECOMMEND BOOKS
+// ==========================================
+app.get("/api/recommendations", async(req, res) => {
+    try {
+        await connectDB();
+
+        const userId = req.cookies.userId;
+        if (!userId) return res.json({ books: [] });
+
+        const user = await getCol('users').findOne({ _id: new ObjectId(userId) });
+
+        if (!user || !user.viewedCategories || user.viewedCategories.length === 0) {
+            return res.json({ books: [] });
+        }
+
+        const counts = {};
+        user.viewedCategories.forEach(cat => {
+            counts[cat] = (counts[cat] || 0) + 1;
+        });
+
+        const favoriteCategory = Object.keys(counts)
+            .reduce((a, b) => counts[a] > counts[b] ? a : b);
+
+        const books = await getCol('books')
+            .find({ category: favoriteCategory })
+            .limit(4)
+            .toArray();
+
+        res.json({ books });
+
+    } catch (err) {
+        console.error("Recommendation error:", err.message);
+        res.status(500).json({ books: [] });
+    }
 });
 
 // ==========================================
