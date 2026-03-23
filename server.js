@@ -28,7 +28,8 @@ const aiModel = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 // ==========================================
 //  MONGODB CONNECTION
 // ==========================================
-const uri = 'mongodb://127.0.0.1:27017';
+//  "Use the cloud database if available, otherwise use the local one"
+const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/book4u';
 const dbName = 'book4u';
 const mongoClient = new MongoClient(uri);
 let db;
