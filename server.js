@@ -49,16 +49,30 @@ const dbName = 'book4u';
 const mongoClient = new MongoClient(uri);
 let db;
 
+let dbInitialized = false;
 async function connectDB() {
-    if (!db) {
-        await mongoClient.connect();
-        db = mongoClient.db(dbName);
-        console.log('Connected to MongoDB');
+    try {
+        if (!db) {
+            console.log('Connecting to MongoDB...');
+            await mongoClient.connect();
+            db = mongoClient.db(dbName);
+            console.log('Connected successfully to MongoDB');
+            
+            // Ensure initialization happens once per instance
+            if (!dbInitialized) {
+                await initDB();
+                dbInitialized = true;
+            }
+        }
+        return db;
+    } catch (err) {
+        console.error('MongoDB Connection Error:', err.message);
+        throw err;
     }
-    return db;
 }
 
-function getCol(name) {
+async function getCol(name) {
+    await connectDB();
     return db.collection(name);
 }
 
@@ -75,7 +89,8 @@ app.use(express.static(path.join(__dirname), { index: false }));
 // ==========================================
 async function initDB() {
     try {
-        await connectDB();
+        // We assume connectDB or mongoClient is ready since this is called from connectDB
+        const database = mongoClient.db(dbName);
 
         // Ensure indexes
         await getCol('users').createIndex({ email: 1 }, { unique: true });
@@ -899,18 +914,20 @@ app.get('/', async (req, res) => {
 });
 
 // ==========================================
-//  START SERVER
+//  START SERVER (Local Only)
 // ==========================================
 if (process.env.NODE_ENV !== 'production') {
     initDB().then(() => {
         app.listen(port, () => {
             console.log(`\n🚀 Book4U Server running at http://localhost:${port}`);
-            console.log(`📚 Collections: users, books, carts, purchases`);
-            console.log(`✅ Authentication, Cart, Shop, and Seller APIs active\n`);
         });
     }).catch(err => {
         console.error('Failed to start server:', err.message);
     });
+} else {
+    // In production (Vercel), we initialize on first request or here
+    // But we don't call app.listen()
+    connectDB().catch(err => console.error("Initial DB connect failed:", err.message));
 }
 
 // Export for Vercel
