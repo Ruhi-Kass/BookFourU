@@ -6,6 +6,22 @@ const crypto = require('crypto');
 const OpenAI = require('openai');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const cookieParser = require("cookie-parser");
+const multer = require('multer');
+const fs = require('fs');
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) { fs.mkdirSync(uploadsDir); }
+
+// Multer config for book image uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, uploadsDir),
+    filename: (req, file, cb) => {
+        const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E6) + path.extname(file.originalname);
+        cb(null, uniqueName);
+    }
+});
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } }); // 5MB limit
 
 const app = express();
 app.use(cookieParser());
@@ -51,6 +67,7 @@ function getCol(name) {
 // ==========================================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(uploadsDir));
 app.use(express.static(path.join(__dirname), { index: false }));
 
 // ==========================================
@@ -72,24 +89,24 @@ async function initDB() {
         if (bookCount === 0) {
             const books = [
                 // 📚 EDUCATIONAL (3 Books)
-                { bookId: '1', title: 'Learning Python', author: 'Sarah J.', category: 'educational', price: 14.99, pages: 400, description: 'Master Python from scratch.' },
-                { bookId: '2', title: 'Mastering Linux', author: 'Linus T.', category: 'educational', price: 19.99, pages: 350, description: 'The ultimate guide to Linux systems.' },
-                { bookId: '3', title: 'Web Development 101', author: 'Dev Team', category: 'educational', price: 12.99, pages: 280, description: 'Build your first website.' },
+                { bookId: '1', title: 'Learning Python', author: 'Sarah J.', category: 'educational', price: 14.99, pages: 400, description: 'Master Python from scratch.', image: 'assets/book1.jpg' },
+                { bookId: '2', title: 'Mastering Linux', author: 'Linus T.', category: 'educational', price: 19.99, pages: 350, description: 'The ultimate guide to Linux systems.', image: 'assets/book2.jpg' },
+                { bookId: '3', title: 'Web Development 101', author: 'Dev Team', category: 'educational', price: 12.99, pages: 280, description: 'Build your first website.', image: 'assets/book3.jpg' },
 
                 // 📖 FICTION (3 Books)
-                { bookId: '4', title: 'The Silent Forest', author: 'Emma Woods', category: 'fiction', price: 11.99, pages: 320, description: 'A thrilling mystery in the woods.' },
-                { bookId: '5', title: 'Echoes of Time', author: 'Arthur C.', category: 'fiction', price: 15.50, pages: 410, description: 'A journey across different eras.' },
-                { bookId: '6', title: 'The Last Hero', author: 'Jack Black', category: 'fiction', price: 13.99, pages: 290, description: 'An epic fantasy adventure.' },
+                { bookId: '4', title: 'The Silent Forest', author: 'Emma Woods', category: 'fiction', price: 11.99, pages: 320, description: 'A thrilling mystery in the woods.', image: 'assets/book4.jpg' },
+                { bookId: '5', title: 'Echoes of Time', author: 'Arthur C.', category: 'fiction', price: 15.50, pages: 410, description: 'A journey across different eras.', image: 'assets/book5.jpg' },
+                { bookId: '6', title: 'The Last Hero', author: 'Jack Black', category: 'fiction', price: 13.99, pages: 290, description: 'An epic fantasy adventure.', image: 'assets/book6.jpg' },
 
                 // 📕 NON-FICTION (3 Books)
-                { bookId: '7', title: 'History Uncovered', author: 'Robert B.', category: 'non-fiction', price: 16.99, pages: 380, description: 'Untold stories from the past.' },
-                { bookId: '8', title: 'Atomic Habits', author: 'James Clear', category: 'non-fiction', price: 18.00, pages: 320, description: 'Build good habits and break bad ones.' },
-                { bookId: '9', title: 'Deep Work', author: 'Cal Newport', category: 'non-fiction', price: 17.50, pages: 300, description: 'Rules for focused success.' },
+                { bookId: '7', title: 'History Uncovered', author: 'Robert B.', category: 'non-fiction', price: 16.99, pages: 380, description: 'Untold stories from the past.', image: 'assets/book7.jpg' },
+                { bookId: '8', title: 'Atomic Habits', author: 'James Clear', category: 'non-fiction', price: 18.00, pages: 320, description: 'Build good habits and break bad ones.', image: 'assets/book8.jpg' },
+                { bookId: '9', title: 'Deep Work', author: 'Cal Newport', category: 'non-fiction', price: 17.50, pages: 300, description: 'Rules for focused success.', image: 'assets/book9.jpg' },
 
                 // 🎌 anime mangas (3 Books)
-                { bookId: '10', title: 'Jujutsu Battles Vol 1', author: 'Gege A.', category: 'anime mangas', price: 9.99, pages: 200, description: 'Curses, sorcerers, and epic fights.' },
-                { bookId: '11', title: 'Ninja Chronicles', author: 'Masashi K.', category: 'anime mangas', price: 8.99, pages: 190, description: 'The journey of a young ninja.' },
-                { bookId: '12', title: 'Hero Academy', author: 'Kohei H.', category: 'anime mangas', price: 10.50, pages: 210, description: 'A world where everyone has superpowers.' }
+                { bookId: '10', title: 'Jujutsu Battles Vol 1', author: 'Gege A.', category: 'anime mangas', price: 9.99, pages: 200, description: 'Curses, sorcerers, and epic fights.', image: 'assets/book10.jpg' },
+                { bookId: '11', title: 'Ninja Chronicles', author: 'Masashi K.', category: 'anime mangas', price: 8.99, pages: 190, description: 'The journey of a young ninja.', image: 'assets/book11.jpg' },
+                { bookId: '12', title: 'Hero Academy', author: 'Kohei H.', category: 'anime mangas', price: 10.50, pages: 210, description: 'A world where everyone has superpowers.', image: 'assets/book12.jpg' }
             ];
             await getCol('books').insertMany(books);
             console.log('Books collection seeded.');
@@ -126,17 +143,13 @@ app.post('/chat', async(req, res) => {
             return res.status(503).json({ reply: "AI not configured." });
         }
 
-        // --- STEP 1: FETCH LIVE BOOKS FROM MONGODB ---
-        await connectDB(); // Make sure database is connected
+        await connectDB();
         const liveBooks = await getCol('books').find({}).toArray();
 
-        // Format the books into a readable list for the AI (e.g., "- The Great Adventure ($9.99)")
         const bookListString = liveBooks.map(book =>
             `- ${book.title} by ${book.author} (Category: ${book.category}, Price: $${book.price})`
         ).join('\n');
-        // ---------------------------------------------
 
-        // --- STEP 2: BUILD THE SMART PROMPT ---
         const systemInstruction = `
         You are the official, friendly AI shopping assistant for 'BOOK4U'.
 
@@ -153,7 +166,6 @@ app.post('/chat', async(req, res) => {
 
         const prompt = `${systemInstruction}\n\nUser asks: ${userMessage}`;
 
-        // --- STEP 3: SEND TO GEMINI ---
         const result = await aiModel.generateContent(prompt);
         const response = await result.response;
 
@@ -162,6 +174,21 @@ app.post('/chat', async(req, res) => {
     } catch (error) {
         console.error("Gemini AI Error:", error.message);
         res.status(500).json({ reply: "Error connecting to AI." });
+    }
+});
+
+// ==========================================
+//  STATS ENDPOINT
+// ==========================================
+app.get('/api/stats', async(req, res) => {
+    try {
+        await connectDB();
+        const userCount = await getCol('users').countDocuments({ accountType: { $exists: true } });
+        const bookCount = await getCol('books').countDocuments();
+        const cartCount = await getCol('carts').countDocuments();
+        res.json({ success: true, userCount, bookCount, cartCount });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
     }
 });
 
@@ -184,56 +211,33 @@ app.get('/api/books', async(req, res) => {
 app.post('/api/register', async(req, res) => {
     try {
         await connectDB();
-        const { fullname, username, email, address, password, confirmPassword } = req.body;
+        const { fullname, username, email, address, password, confirmPassword, accountType, storeName, paymentPreference } = req.body;
 
         // Validation
-        if (!fullname || !username || !email || !address || !password || !confirmPassword) {
-            return res.status(400).json({ success: false, message: 'All fields are required' });
+        if (!fullname || !username || !email || !password) {
+            return res.status(400).json({ success: false, message: 'All required fields must be filled.' });
         }
-        if (fullname.trim().length < 4) {
-            return res.status(400).json({ success: false, message: 'Full name must be at least 4 characters' });
+
+        if (!accountType || (accountType !== 'buyer' && accountType !== 'seller')) {
+            return res.status(400).json({ success: false, message: 'Invalid account type' });
         }
-        if (username.trim().length < 3) {
-            return res.status(400).json({ success: false, message: 'Username must be at least 3 characters' });
-        }
-        if (password.length < 8) {
-            return res.status(400).json({ success: false, message: 'Password must be at least 8 characters' });
-        }
+
         if (password !== confirmPassword) {
-            return res.status(400).json({ success: false, message: 'Passwords do not match' });
-        }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ success: false, message: 'Invalid email format' });
+            return res.status(400).json({ success: false, message: 'Passwords do not match.' });
         }
 
-        const users = getCol('users');
-
-        // Check email uniqueness
-        const existingEmail = await users.findOne({ email: email.toLowerCase() });
-        if (existingEmail) {
-            return res.status(400).json({ success: false, message: 'Email already registered. Please login instead.' });
-        }
-
-        // Check username uniqueness
-        const existingUsername = await users.findOne({ username: username.toLowerCase() });
-        if (existingUsername) {
-            return res.status(400).json({ success: false, message: 'Username already taken. Please choose another.' });
-        }
-
-        // Ensure no two users have the same password
         const hashedPw = hashPassword(password);
-        const existingPassword = await users.findOne({ password: hashedPw });
-        if (existingPassword) {
-            return res.status(400).json({ success: false, message: 'Password already in use by another account. Please choose a different password.' });
-        }
+        const users = getCol('users');
 
         const newUser = {
             fullname: fullname.trim(),
             username: username.trim().toLowerCase(),
             email: email.trim().toLowerCase(),
-            address: address.trim(),
+            address: (address || '').trim(),
             password: hashedPw,
+            accountType,
+            storeName: accountType === 'seller' ? (storeName || '').trim() || null : null,
+            paymentPreference: accountType === 'seller' ? (paymentPreference || 'paypal') : null,
             cartBookCount: 0,
             viewedCategories: [],
             createdAt: new Date().toISOString()
@@ -242,10 +246,31 @@ app.post('/api/register', async(req, res) => {
         const result = await users.insertOne(newUser);
         const userId = result.insertedId.toString();
 
+        // Set cookies for user session (7 days)
+        res.cookie("userId", userId, {
+            httpOnly: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+        res.cookie("userType", accountType, {
+            httpOnly: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+        res.cookie("userName", newUser.fullname, {
+            httpOnly: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
         res.status(201).json({
             success: true,
             message: 'Account created successfully!',
-            user: { id: userId, fullname: newUser.fullname, username: newUser.username, email: newUser.email }
+            user: {
+                id: userId,
+                fullname: newUser.fullname,
+                username: newUser.username,
+                email: newUser.email,
+                accountType: newUser.accountType,
+                storeName: newUser.storeName
+            }
         });
 
     } catch (error) {
@@ -274,28 +299,112 @@ app.post('/api/login', async(req, res) => {
             return res.status(401).json({ success: false, message: 'No account found with this email. Please sign up first.' });
         }
 
+        if (!user.accountType) {
+            return res.status(401).json({ success: false, message: 'This account was created before the new system. Please sign up again.' });
+        }
+
         if (user.password !== hashPassword(password)) {
             return res.status(401).json({ success: false, message: 'Incorrect password. Please try again.' });
         }
 
-        // Get user's cart count from carts collection
-        const cartCount = await getCol('carts').countDocuments({ userId: user._id.toString() });
+        // Get user's cart from carts collection
+        const cartItems = await getCol('carts').find({ userId: user._id.toString() }).toArray();
+        const cartCount = cartItems.length;
+
+        // Set session cookies
+        const userId = user._id.toString();
+        res.cookie("userId", userId, {
+            httpOnly: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+        res.cookie("userType", user.accountType, {
+            httpOnly: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+        res.cookie("userName", user.fullname, {
+            httpOnly: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
 
         res.json({
             success: true,
             message: 'Login successful!',
             user: {
-                id: user._id.toString(),
+                id: userId,
                 fullname: user.fullname,
                 username: user.username,
                 email: user.email,
+                accountType: user.accountType,
+                storeName: user.storeName || null,
                 cartBookCount: cartCount
-            }
+            },
+            // Send cart items so client can restore them
+            cartItems: cartItems.map(item => ({
+                dbId: item._id.toString(),
+                id: item.bookId,
+                title: item.bookTitle,
+                price: item.bookPrice,
+                category: item.bookCategory
+            }))
         });
 
     } catch (error) {
         console.error('Login error:', error.message);
         res.status(500).json({ success: false, message: 'Server error during login' });
+    }
+});
+
+// ==========================================
+//  AUTH: LOGOUT
+// ==========================================
+app.post('/api/logout', (req, res) => {
+    res.clearCookie('userId');
+    res.clearCookie('userType');
+    res.clearCookie('userName');
+    res.json({ success: true, message: 'Logged out' });
+});
+
+// ==========================================
+//  PROFILE (get current user info from cookie)
+// ==========================================
+app.get('/api/profile', async(req, res) => {
+    try {
+        await connectDB();
+        const userId = req.cookies.userId;
+        if (!userId) return res.json({ success: false, message: 'Not logged in' });
+
+        let user;
+        try {
+            user = await getCol('users').findOne({ _id: new ObjectId(userId) }, { projection: { password: 0 } });
+        } catch {
+            return res.json({ success: false, message: 'Invalid session' });
+        }
+
+        if (!user) return res.json({ success: false, message: 'User not found' });
+
+        const cartItems = await getCol('carts').find({ userId }).toArray();
+
+        res.json({
+            success: true,
+            user: {
+                id: userId,
+                fullname: user.fullname,
+                username: user.username,
+                email: user.email,
+                accountType: user.accountType,
+                storeName: user.storeName || null,
+                cartBookCount: cartItems.length
+            },
+            cartItems: cartItems.map(item => ({
+                dbId: item._id.toString(),
+                id: item.bookId,
+                title: item.bookTitle,
+                price: item.bookPrice,
+                category: item.bookCategory
+            }))
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
     }
 });
 
@@ -311,6 +420,13 @@ app.post('/api/cart/add', async(req, res) => {
 
         if (!userId || !bookId || !bookTitle || bookPrice === undefined) {
             return res.status(400).json({ success: false, message: 'Missing required fields' });
+        }
+
+        // Check if already in cart
+        const existing = await getCol('carts').findOne({ userId, bookId });
+        if (existing) {
+            const cartCount = await getCol('carts').countDocuments({ userId });
+            return res.json({ success: true, message: 'Already in cart', cartCount });
         }
 
         const cartItem = {
@@ -419,6 +535,63 @@ app.post('/api/purchase', async(req, res) => {
 });
 
 // ==========================================
+//  SELLER: POST A BOOK
+// ==========================================
+app.post('/api/seller/post-book', upload.single('bookImage'), async(req, res) => {
+    try {
+        await connectDB();
+        const userId = req.cookies.userId;
+        if (!userId) return res.status(401).json({ success: false, message: 'Not logged in' });
+
+        let user;
+        try {
+            user = await getCol('users').findOne({ _id: new ObjectId(userId) });
+        } catch {
+            return res.status(401).json({ success: false, message: 'Invalid session' });
+        }
+
+        if (!user || user.accountType !== 'seller') {
+            return res.status(403).json({ success: false, message: 'Only sellers can post books' });
+        }
+
+        const { title, author, description, price, category, imageUrl, image, status, paymentMethod } = req.body;
+        if (!title || !price || !category) {
+            return res.status(400).json({ success: false, message: 'Title, price, and category are required.' });
+        }
+
+        // Auto-generate bookId
+        const lastBook = await getCol('books').find({}).sort({ _id: -1 }).limit(1).toArray();
+        const lastNumericId = lastBook.length ? (parseInt(lastBook[0].bookId) || 100) : 100;
+        const bookId = String(lastNumericId + 1);
+
+        const newBook = {
+            bookId,
+            title: title.trim(),
+            author: (author || user.fullname).trim(),
+            price: parseFloat(price),
+            category: (category || 'general').toLowerCase(),
+            description: (description || '').trim(),
+            imageUrl: req.file ? '/uploads/' + req.file.filename : (imageUrl || image || '').trim(),
+            image: req.file ? '/uploads/' + req.file.filename : (imageUrl || image || '').trim(),
+            status: status || 'In Stock',
+            sellerId: userId,
+            sellerName: user.fullname,
+            storeName: user.storeName || null,
+            paymentMethod: paymentMethod || user.paymentPreference || 'paypal',
+            postedAt: new Date().toISOString(),
+            isSellerBook: true
+        };
+
+        await getCol('books').insertOne(newBook);
+
+        res.status(201).json({ success: true, message: 'Book posted successfully!', book: newBook });
+    } catch (err) {
+        console.error('Seller post book error:', err.message);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// ==========================================
 //  USERS LIST (for admin visibility)
 // ==========================================
 app.get('/api/users', async(req, res) => {
@@ -443,7 +616,7 @@ function requireAdmin(req, res, next) {
     next();
 }
 
-// Admin Login (verifies against admins collection in DB)
+// Admin Login
 app.post('/api/admin/login', async(req, res) => {
     try {
         await connectDB();
@@ -455,7 +628,6 @@ app.post('/api/admin/login', async(req, res) => {
         if (!admin || admin.password !== hashPassword(password)) {
             return res.status(401).json({ success: false, message: 'Invalid admin credentials.' });
         }
-        // Return the shared admin key so subsequent requests can authenticate
         res.json({ success: true, message: 'Admin login successful.', adminKey: ADMIN_KEY });
     } catch (err) {
         console.error('Admin login error:', err.message);
@@ -471,7 +643,6 @@ app.post('/api/admin/books', requireAdmin, async(req, res) => {
         if (!title || !price || !category) {
             return res.status(400).json({ success: false, message: 'title, price, and category are required.' });
         }
-        // auto-generate bookId
         const lastBook = await getCol('books').find({}).sort({ bookId: -1 }).limit(1).toArray();
         const lastId = lastBook.length ? (parseInt(lastBook[0].bookId) || 0) : 0;
         const bookId = String(lastId + 1);
@@ -503,7 +674,6 @@ app.delete('/api/admin/books/:id', requireAdmin, async(req, res) => {
         await connectDB();
         const { id } = req.params;
         let result;
-        // Try ObjectId first, then bookId string
         try {
             result = await getCol('books').deleteOne({ _id: new ObjectId(id) });
         } catch {
@@ -519,92 +689,6 @@ app.delete('/api/admin/books/:id', requireAdmin, async(req, res) => {
     }
 });
 
-app.get('/', async(req, res) => {
-    try {
-        await connectDB();
-
-        let userId = req.cookies.userId;
-
-        if (!userId) {
-            const result = await getCol('users').insertOne({
-                viewedCategories: [],
-                createdAt: new Date().toISOString()
-            });
-
-            userId = result.insertedId.toString();
-
-            res.cookie("userId", userId, {
-                httpOnly: true,
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
-        }
-
-        res.sendFile(path.join(__dirname, 'index.html'));
-    } catch (err) {
-        console.error("Home error:", err.message);
-        res.status(500).send("Server error");
-    }
-});
-app.get('/', async(req, res) => {
-    try {
-        await connectDB();
-
-        console.log("HOME ROUTE HIT"); // 👈 ADD THIS
-
-        let userId = req.cookies?.userId;
-
-        if (!userId) {
-            console.log("CREATING COOKIE"); // 👈 ADD THIS
-
-            const result = await getCol('users').insertOne({
-                viewedCategories: [],
-                createdAt: new Date().toISOString()
-            });
-
-            userId = result.insertedId.toString();
-
-            res.cookie("userId", userId, {
-                httpOnly: true,
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
-        }
-
-        res.sendFile(path.join(__dirname, 'index.html'));
-    } catch (err) {
-        console.error("Home error:", err.message);
-        res.status(500).send("Server error");
-    }
-});
-app.get('/', async(req, res) => {
-    try {
-        await connectDB();
-
-        console.log("HOME ROUTE HIT"); // 👈 ADD THIS
-
-        let userId = req.cookies?.userId;
-
-        if (!userId) {
-            console.log("CREATING COOKIE"); // 👈 ADD THIS
-
-            const result = await getCol('users').insertOne({
-                viewedCategories: [],
-                createdAt: new Date().toISOString()
-            });
-
-            userId = result.insertedId.toString();
-
-            res.cookie("userId", userId, {
-                httpOnly: true,
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
-        }
-
-        res.sendFile(path.join(__dirname, 'index.html'));
-    } catch (err) {
-        console.error("Home error:", err.message);
-        res.status(500).send("Server error");
-    }
-});
 // ==========================================
 //  TRACK BOOK VIEW
 // ==========================================
@@ -619,7 +703,11 @@ app.post("/api/track-view", async(req, res) => {
             return res.json({ success: false });
         }
 
-        await getCol('users').updateOne({ _id: new ObjectId(userId) }, { $push: { viewedCategories: category } });
+        try {
+            await getCol('users').updateOne({ _id: new ObjectId(userId) }, { $push: { viewedCategories: category } });
+        } catch {
+            // ignore if userId is invalid ObjectId
+        }
 
         res.json({ success: true });
 
@@ -628,6 +716,7 @@ app.post("/api/track-view", async(req, res) => {
         res.status(500).json({ success: false });
     }
 });
+
 // ==========================================
 //  RECOMMEND BOOKS
 // ==========================================
@@ -638,7 +727,12 @@ app.get("/api/recommendations", async(req, res) => {
         const userId = req.cookies.userId;
         if (!userId) return res.json({ books: [] });
 
-        const user = await getCol('users').findOne({ _id: new ObjectId(userId) });
+        let user;
+        try {
+            user = await getCol('users').findOne({ _id: new ObjectId(userId) });
+        } catch {
+            return res.json({ books: [] });
+        }
 
         if (!user || !user.viewedCategories || user.viewedCategories.length === 0) {
             return res.json({ books: [] });
@@ -666,13 +760,152 @@ app.get("/api/recommendations", async(req, res) => {
 });
 
 // ==========================================
+//  SELL BOOKS PAGE ACCESS CONTROL
+// ==========================================
+app.get('/sell_books', async (req, res) => {
+    try {
+        await connectDB();
+
+        const userId = req.cookies?.userId;
+        if (!userId) {
+            return res.redirect('/login.html'); // Redirect to login if not authenticated
+        }
+
+        const user = await getCol('users').findOne({ _id: new ObjectId(userId) });
+        if (!user || user.accountType !== 'seller') {
+            return res.status(403).send('Access denied. Only sellers can access this page.');
+        }
+
+        res.sendFile(path.join(__dirname, 'sell_books.html'));
+    } catch (err) {
+        console.error('Sell Books error:', err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+// Alias: /api/sell-book -> reuse /api/seller/post-book logic for sell_books.html form
+app.post('/api/sell-book', upload.single('bookImage'), async (req, res) => {
+    try {
+        await connectDB();
+        const userId = req.cookies.userId;
+        if (!userId) return res.status(401).json({ success: false, message: 'Not logged in' });
+
+        let user;
+        try {
+            user = await getCol('users').findOne({ _id: new ObjectId(userId) });
+        } catch {
+            return res.status(401).json({ success: false, message: 'Invalid session' });
+        }
+
+        if (!user || user.accountType !== 'seller') {
+            return res.status(403).json({ success: false, message: 'Only sellers can post books' });
+        }
+
+        // Support both JSON and form-urlencoded field names
+        const title = req.body.title || req.body.bookTitle;
+        const author = req.body.author || req.body.bookAuthor;
+        const description = req.body.description || req.body.bookDescription;
+        const price = req.body.price || req.body.bookPrice;
+        const category = req.body.category || 'general';
+        const imageUrl = req.body.imageUrl || req.body.image || '';
+        const status = req.body.status || 'In Stock';
+        const paymentMethod = req.body.paymentMethod || user.paymentPreference || 'paypal';
+
+        if (!title || !price) {
+            return res.status(400).json({ success: false, message: 'Title and price are required.' });
+        }
+
+        const lastBook = await getCol('books').find({}).sort({ _id: -1 }).limit(1).toArray();
+        const lastNumericId = lastBook.length ? (parseInt(lastBook[0].bookId) || 100) : 100;
+        const bookId = String(lastNumericId + 1);
+
+        const newBook = {
+            bookId,
+            title: title.trim(),
+            author: (author || user.fullname).trim(),
+            price: parseFloat(price),
+            category: (category || 'general').toLowerCase(),
+            description: (description || '').trim(),
+            imageUrl: req.file ? '/uploads/' + req.file.filename : (imageUrl || '').trim(),
+            image: req.file ? '/uploads/' + req.file.filename : (imageUrl || '').trim(),
+            status: status || 'In Stock',
+            sellerId: userId,
+            sellerName: user.fullname,
+            storeName: user.storeName || null,
+            paymentMethod: paymentMethod,
+            postedAt: new Date().toISOString(),
+            isSellerBook: true
+        };
+
+        await getCol('books').insertOne(newBook);
+
+        res.status(201).json({ success: true, message: 'Book posted successfully!', book: newBook });
+    } catch (err) {
+        console.error('Sell book error:', err.message);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// ==========================================
+//  LIVE STATS API
+// ==========================================
+app.get('/api/stats', async (req, res) => {
+    try {
+        await connectDB();
+        const userCount = await getCol('users').countDocuments();
+        const bookCount = await getCol('books').countDocuments();
+        const cartCount = await getCol('carts').countDocuments();
+        
+        res.json({
+            success: true,
+            userCount,
+            bookCount,
+            cartCount
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// ==========================================
+//  DEFAULT LANDING PAGE
+// ==========================================
+app.get('/', async (req, res) => {
+    try {
+        await connectDB();
+
+        let userId = req.cookies?.userId;
+
+        if (!userId) {
+            // Create a guest session
+            const result = await getCol('users').insertOne({
+                viewedCategories: [],
+                createdAt: new Date().toISOString()
+            });
+
+            userId = result.insertedId.toString();
+
+            res.cookie("userId", userId, {
+                httpOnly: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+        }
+
+        res.sendFile(path.join(__dirname, 'index.html'));
+    } catch (err) {
+        console.error("Home error:", err.message);
+        res.status(500).send("Server error");
+    }
+});
+
+// ==========================================
 //  START SERVER
 // ==========================================
 initDB().then(() => {
     app.listen(port, () => {
         console.log(`\n🚀 Book4U Server running at http://localhost:${port}`);
         console.log(`📚 Collections: users, books, carts, purchases`);
-        console.log(`✅ Authentication, Cart, and Shop APIs active\n`);
+        console.log(`✅ Authentication, Cart, Shop, and Seller APIs active\n`);
     });
 }).catch(err => {
     console.error('Failed to start server:', err.message);

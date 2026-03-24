@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Book4U</title>
+    <title>Contact Us</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -12,18 +12,23 @@
 <body>
     <!-- Header -->
     <header>
-        <div class="logo">Book4U</div>
+        <div class="logo">
+            <img src="assets/logo.png" alt="Book4U Logo">
+        </div>
+        <button class="hamburger" onclick="document.querySelector('header nav').classList.toggle('nav-open');this.classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
         <nav>
             <ul>
-                <li><a href="index.html" class="back-btn">← Back to Home</a></li>
-                <li><a href="shop.html" class="nav-link">Shop</a></li>
-                <li><a href="about.html" class="nav-link">About Us</a></li>
-                <li><a href="contact.html" class="nav-link active">Contact Us</a></li>
-                <li><a href="login.html" class="nav-link">Login</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li class="active"><a href="contact.html">Contact Us</a></li>
+                <li><a href="login.html" id="navLoginBtn">Login</a></li>
             </ul>
         </nav>
         <div class="header-icons">
-            <span id="cartIcon">🛒 <span id="cartCount">0</span></span>
+            <a href="mycart.html" class="cart-link">🛒 My Cart (<span id="cartCount">0</span>)</a>
         </div>
     </header>
 
@@ -95,8 +100,53 @@
     </main>
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 Book4U. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand footer-col">
+                <div class="footer-logo">📚 Book4U</div>
+                <p>Your ultimate destination for buying and selling books. Discover thousands of titles across every genre.</p>
+                <div class="footer-socials">
+                    <a href="#" class="footer-social-btn">📘</a>
+                    <a href="#" class="footer-social-btn">🐦</a>
+                    <a href="#" class="footer-social-btn">📷</a>
+                    <a href="#" class="footer-social-btn">✉️</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop Books</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="buyer_signup.html">Buyer Sign Up</a></li>
+                    <li><a href="seller_signup.html">Seller Sign Up</a></li>
+                    <li><a href="mycart.html">My Cart</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-newsletter">
+                <h4>Stay Updated</h4>
+                <p>Get the latest book drops and deals straight to your inbox.</p>
+                <div class="footer-newsletter-form">
+                    <input type="email" placeholder="your@email.com">
+                    <button type="button">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Book4U. All rights reserved.</p>
+            <div class="footer-badges">
+                <span class="footer-badge">🔒 Secure Payments</span>
+                <span class="footer-badge">🚚 Fast Delivery</span>
+                <span class="footer-badge">⭐ Top Rated</span>
+            </div>
+        </div>
     </footer>
 
     <script src="script.js"></script>

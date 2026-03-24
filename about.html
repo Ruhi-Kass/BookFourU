@@ -283,12 +283,23 @@
             grid-template-columns: 1fr 1fr;
             gap: 70px;
             align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .ab-story > div:first-child {
+            text-align: left;
+            margin: 0 auto;
+            max-width: 500px;
         }
 
         @media(max-width:768px) {
             .ab-story {
                 grid-template-columns: 1fr;
                 gap: 40px
+            }
+            .ab-story > div:first-child {
+                text-align: center;
             }
         }
 
@@ -706,20 +717,23 @@
     <div class="cb">📙</div>
 
     <header>
-        <div class="logo">Book4U</div>
+        <div class="logo">
+            <img src="assets/logo.png" alt="Book4U Logo">
+        </div>
+        <button class="hamburger" onclick="document.querySelector('header nav').classList.toggle('nav-open');this.classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
         <nav>
             <ul>
-                <li><a href="index.html" class="back-btn">← Back to Home</a></li>
-                <li><a href="shop.html" class="nav-link">Shop</a></li>
-                <li><a href="about.html" class="nav-link active">About Us</a></li>
-                <li><a href="contact.html" class="nav-link">Contact Us</a></li>
-                <li><a href="login.html" class="nav-link" id="navLoginBtn">Login</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li class="active"><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="login.html" id="navLoginBtn">Login</a></li>
             </ul>
         </nav>
         <div class="header-icons">
-            <a href="mycart.html" style="text-decoration:none;">
-                <span id="cartIcon">🛒 <span id="cartCount">0</span></span>
-            </a>
+            <a href="mycart.html" class="cart-link">🛒 My Cart (<span id="cartCount">0</span>)</a>
         </div>
     </header>
 
@@ -845,38 +859,62 @@
             <h2>Ready to find your next great read?</h2>
             <p>Thousands of books are waiting for you. Start exploring today.</p>
             <div class="abctas">
-                <a href="shop.html" class="p">📚 Browse Books</a>
-                <a href="signup.html" class="s">🎉 Join Book4U</a>
+                <a href="seller_signup.html" class="s">🎉 Join Book4U as Seller</a>
+                <a href="buyer_signup.html" class="p">📚 Browse Books as Buyer</a>
             </div>
         </section>
     </main>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Book4U</h3>
-                <p>Your one-stop shop for all your reading needs.</p>
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand footer-col">
+                <div class="footer-logo">📚 Book4U</div>
+                <p>Your ultimate destination for buying and selling books. Discover thousands of titles across every genre.</p>
+                <div class="footer-socials">
+                    <a href="#" class="footer-social-btn">📘</a>
+                    <a href="#" class="footer-social-btn">🐦</a>
+                    <a href="#" class="footer-social-btn">📷</a>
+                    <a href="#" class="footer-social-btn">✉️</a>
+                </div>
             </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
+            <div class="footer-col">
+                <h4>Explore</h4>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="shop.html">Shop Books</a></li>
                     <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: info@book4u.com</p>
-                <p>Phone: +1 234 567 890</p>
+            <div class="footer-col">
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="buyer_signup.html">Buyer Sign Up</a></li>
+                    <li><a href="seller_signup.html">Seller Sign Up</a></li>
+                    <li><a href="mycart.html" class="cart-link">🛒 My Cart</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-newsletter">
+                <h4>Stay Updated</h4>
+                <p>Get the latest book drops and deals straight to your inbox.</p>
+                <div class="footer-newsletter-form">
+                    <input type="email" placeholder="your@email.com">
+                    <button type="button">Subscribe</button>
+                </div>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 Book4U. All rights reserved.</p>
+            <div class="footer-badges">
+                <span class="footer-badge">🔒 Secure Payments</span>
+                <span class="footer-badge">🚚 Fast Delivery</span>
+                <span class="footer-badge">⭐ Top Rated</span>
+            </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
 </body>
 
-</html>
+</html>

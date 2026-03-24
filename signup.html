@@ -75,6 +75,23 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Dynamically show Buyer or Seller form based on query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const accountType = urlParams.get('buyer') ? 'Buyer' : 'Seller';
+
+        document.querySelector('.signup-section h2').textContent = `Create Your ${accountType} Account`;
+
+        if (accountType === 'Seller') {
+            const sellerFields = `
+                <div class="form-group">
+                    <label for="storeName">Store Name (Optional)</label>
+                    <input type="text" id="storeName" name="storeName" placeholder="Enter your store name">
+                </div>
+            `;
+            document.querySelector('.signup-btn').insertAdjacentHTML('beforebegin', sellerFields);
+        }
+    </script>
 </body>
 
 </html>

@@ -9,602 +9,279 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* ── Shop Section ── */
-        .shop-section {
-            padding: 0 0 60px;
-            width: 100%;
-            overflow-x: hidden;
-        }
-
-        .shop-header {
-            text-align: center;
-            padding: 40px 20px 20px;
-        }
-
-        .shop-header h1 {
-            font-size: 2.2rem;
-            color: #1a2e1a;
-            margin-bottom: 8px;
-        }
-
-        .shop-header p {
-            color: #666;
-            font-size: 1rem;
-            margin-bottom: 18px;
-        }
+        .shop-section { padding: 0 0 60px; width: 100%; overflow-x: hidden; }
+        .shop-header { text-align: center; padding: 40px 20px 20px; }
+        .shop-header h1 { font-size: 2.2rem; color: #1a2e1a; margin-bottom: 8px; }
+        .shop-header p { color: #666; font-size: 1rem; margin-bottom: 18px; }
 
         .stats-bar {
-            display: inline-flex;
-            gap: 30px;
+            display: inline-flex; gap: 30px;
             background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-            border: 1px solid #a5d6a7;
-            border-radius: 30px;
-            padding: 10px 28px;
-            font-size: 0.88rem;
-            color: #2e7d32;
-            font-weight: 500;
+            border: 1px solid #a5d6a7; border-radius: 30px;
+            padding: 10px 28px; font-size: 0.88rem; color: #2e7d32; font-weight: 500;
         }
+
+        /* ── Seller Panel ── */
+        .seller-panel {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 60%, #3949ab 100%);
+            border-radius: 20px;
+            margin: 20px auto 36px;
+            max-width: 1400px;
+            padding: 32px 36px;
+            box-shadow: 0 12px 40px rgba(26,35,126,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .seller-panel::before {
+            content: '📚 🏪 📦';
+            position: absolute; right: 24px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 4rem; opacity: 0.06; pointer-events: none;
+        }
+        .seller-panel-header {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 28px;
+        }
+        .seller-panel-icon { font-size: 2rem; }
+        .seller-panel-title { font-size: 1.4rem; font-weight: 800; color: white; margin-bottom: 2px; }
+        .seller-panel-sub { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+
+        .seller-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+        .seller-form-grid .full-col { grid-column: 1 / -1; }
+        .seller-form-grid .two-col { grid-column: span 2; }
+
+        .s-label {
+            display: block; font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            color: rgba(255,255,255,0.75); margin-bottom: 7px;
+        }
+        .s-input, .s-textarea, .s-select {
+            width: 100%; padding: 12px 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1.5px solid rgba(255,255,255,0.2);
+            border-radius: 10px; color: white;
+            font-size: 0.92rem; font-family: 'Inter', sans-serif;
+            outline: none; transition: all 0.22s; box-sizing: border-box;
+        }
+        .s-input::placeholder, .s-textarea::placeholder { color: rgba(255,255,255,0.45); }
+        .s-input:focus, .s-textarea:focus, .s-select:focus {
+            border-color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.18);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+        }
+        .s-select { appearance: none; }
+        .s-select option { background: #283593; color: white; }
+        .s-textarea { resize: vertical; min-height: 80px; }
+
+        /* Payment method for seller panel */
+        .s-pay-methods { display: flex; gap: 10px; }
+        .s-pay-opt {
+            flex: 1; border: 1.5px solid rgba(255,255,255,0.2);
+            border-radius: 10px; padding: 10px 8px; text-align: center;
+            cursor: pointer; transition: all 0.2s;
+            font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.08);
+        }
+        .s-pay-opt:hover { border-color: rgba(255,255,255,0.5); color: white; }
+        .s-pay-opt.selected { border-color: #ffd54f; background: rgba(255,213,79,0.15); color: #ffd54f; }
+        .s-pay-opt .s-pay-icon { font-size: 1.2rem; display: block; margin-bottom: 3px; }
+
+        .seller-post-btn {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, #ffd54f, #ff8f00);
+            color: #1a1a1a; border: none; border-radius: 12px;
+            font-size: 0.98rem; font-weight: 800; cursor: pointer;
+            transition: all 0.25s; box-shadow: 0 6px 20px rgba(255,152,0,0.4);
+            margin-top: 4px; letter-spacing: 0.02em;
+        }
+        .seller-post-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,152,0,0.5); }
+        .seller-post-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .seller-msg {
+            margin-top: 12px; padding: 10px 16px; border-radius: 8px;
+            font-size: 0.86rem; font-weight: 600; display: none;
+        }
+        .seller-msg.ok { background: rgba(76,175,80,0.2); color: #a5d6a7; border: 1px solid rgba(165,214,167,0.3); display: block; }
+        .seller-msg.err { background: rgba(229,57,53,0.2); color: #ef9a9a; border: 1px solid rgba(239,154,154,0.3); display: block; }
 
         /* ── Category Filter ── */
-        .category-filter {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 0 20px 28px;
-        }
-
+        .category-filter { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; padding: 0 20px 28px; }
         .category-card {
-            padding: 9px 22px;
-            border-radius: 25px;
-            border: 2px solid #c8e6c9;
-            background: white;
-            color: #2e7d32;
-            font-weight: 600;
-            font-size: 0.88rem;
-            cursor: pointer;
-            transition: all 0.2s;
+            padding: 9px 22px; border-radius: 25px; border: 2px solid #c8e6c9;
+            background: white; color: #2e7d32; font-weight: 600; font-size: 0.88rem;
+            cursor: pointer; transition: all 0.2s;
         }
-
-        .category-card:hover,
-        .category-card.active {
-            background: #4CAF50;
-            color: white;
-            border-color: #4CAF50;
+        .category-card:hover, .category-card.active {
+            background: #4CAF50; color: white; border-color: #4CAF50;
             box-shadow: 0 4px 14px rgba(76, 175, 80, 0.35);
         }
 
-        /* ── Full-Width Products Grid ── */
-        .shop-container {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            box-sizing: border-box;
-            padding: 0 24px;
-        }
+        /* ── Products Grid ── */
+        .shop-container { width: 100%; max-width: 1400px; margin: 0 auto; box-sizing: border-box; padding: 0 24px; }
+        .shop-products { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; width: 100%; box-sizing: border-box; justify-items: center; }
+        @media (max-width: 780px) { .shop-products { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; } }
+        @media (max-width: 480px) { .shop-products { grid-template-columns: 1fr; } }
 
-        .shop-products {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 1100px) {
-            .shop-products {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 780px) {
-            .shop-products {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .shop-products {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ── Individual Book Card ── */
         .shop-card {
-            background: white;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid #f0f0f0;
-            transition: all 0.3s;
-            position: relative;
-            display: flex;
-            flex-direction: column;
+            background: white; border-radius: 18px; overflow: visible;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f0f0f0;
+            transition: all 0.3s; position: relative; display: flex; flex-direction: column;
+            width: 100%; max-width: 340px; padding-bottom: 20px;
         }
+        .shop-card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(76, 175, 80, 0.18); }
 
-        .shop-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 36px rgba(76, 175, 80, 0.18);
+        .seller-book-badge {
+            position: absolute; top: 10px; right: 10px; z-index: 2;
+            background: linear-gradient(135deg, #1a237e, #3949ab);
+            color: white; font-size: 0.65rem; font-weight: 700;
+            padding: 3px 9px; border-radius: 10px; text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
-
-
 
         .shop-card-image {
-            height: 240px;
-            overflow: hidden;
+            height: 180px; overflow: hidden; border-radius: 18px 18px 0 0;
             background: linear-gradient(135deg, #f0f4f0, #e8ece8);
-            position: relative;
-            flex-shrink: 0;
+            position: relative; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        }
+        .shop-card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.4s ease; filter: brightness(1.05) contrast(1.05); }
+        .shop-card:hover .shop-card-image img { transform: scale(1.08); filter: brightness(1.1) contrast(1.08); }
+        .book-placeholder {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+            position: absolute; inset: 0;
+        }
+        .book-placeholder-inner { text-align: center; padding: 16px; }
+        .book-placeholder-emoji { font-size: 3.5rem; display: block; margin-bottom: 10px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+        .book-placeholder-title {
+            display: block; font-size: 0.82rem; font-weight: 700; color: #2e7d32;
+            max-width: 140px; overflow: hidden; text-overflow: ellipsis;
+            white-space: nowrap; line-height: 1.3;
         }
 
-        .shop-card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease, filter 0.4s ease;
-            filter: brightness(1.05) contrast(1.05);
-        }
-
-        .shop-card:hover .shop-card-image img {
-            transform: scale(1.08);
-            filter: brightness(1.1) contrast(1.08);
-        }
-
-        .shop-card-content {
-            padding: 18px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .shop-card-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #1a2e1a;
-            margin-bottom: 4px;
-        }
-
-        .shop-card-author {
-            font-size: 0.82rem;
-            color: #888;
-            margin-bottom: 8px;
-        }
-
+        .shop-card-content { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+        .shop-card-title { font-size: 1.05rem; font-weight: 700; color: #1a2e1a; margin-bottom: 4px; }
+        .shop-card-author { font-size: 0.82rem; color: #888; margin-bottom: 8px; }
         .shop-card-description {
-            font-size: 0.84rem;
-            color: #666;
-            line-height: 1.55;
-            margin-bottom: 10px;
+            font-size: 0.87rem; color: #555; line-height: 1.65; margin-bottom: 12px;
+            flex: 1; min-height: 60px;
         }
+        .shop-card-genre { font-size: 0.76rem; color: #aaa; margin-bottom: 10px; }
+        .shop-card-price { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .current-price { font-size: 1.25rem; font-weight: 800; color: #2e7d32; }
+        .original-price { font-size: 0.9rem; color: #bbb; text-decoration: line-through; }
 
-        .shop-card-genre {
-            font-size: 0.78rem;
-            color: #aaa;
-            margin-bottom: 12px;
+        .book-status-badge {
+            position: absolute; top: 10px; left: 10px;
+            padding: 4px 10px; border-radius: 6px;
+            font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+            color: white; z-index: 5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        .book-status-badge.in-stock { background: #4CAF50; display: none; }
+        .book-status-badge.new { background: #2196F3; }
+        .book-status-badge.bestseller { background: #FF9800; }
+        .book-status-badge.sold-out { background: #f44336; }
 
-        .shop-card-price {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-
-        .current-price {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #2e7d32;
-        }
-
-        .original-price {
-            font-size: 0.9rem;
-            color: #bbb;
-            text-decoration: line-through;
-        }
-
-        /* ── Action Buttons ── */
         .shop-card-actions {
-            display: flex;
-            gap: 9px;
+            display: flex; gap: 9px; margin-top: auto; padding-top: 15px; border-top: 1px solid #f9f9f9;
         }
-
         .add-to-cart-btn {
-            flex: 1;
-            padding: 10px 0;
-            border: 2px solid #4CAF50;
-            background: transparent;
-            color: #2e7d32;
-            font-weight: 700;
-            font-size: 0.85rem;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.22s;
+            flex: 1.2; padding: 11px 0; border: 2px solid #4CAF50;
+            background: #fff; color: #2e7d32; font-weight: 700;
+            font-size: 0.82rem; border-radius: 25px; cursor: pointer; transition: all 0.22s;
+            display: flex; align-items: center; justify-content: center;
         }
-
-        .add-to-cart-btn:hover {
-            background: #4CAF50;
-            color: white;
-        }
-
+        .add-to-cart-btn:disabled { border-color: #ddd; color: #999; cursor: not-allowed; }
+        .add-to-cart-btn:hover { background: #4CAF50; color: white; }
         .buy-now-btn {
-            flex: 1;
-            padding: 10px 0;
-            border: none;
-            background: linear-gradient(135deg, #1b5e20, #2e7d32);
-            color: white;
-            font-weight: 700;
-            font-size: 0.85rem;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.22s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
+            flex: 1; padding: 10px 0; border: none;
+            background: linear-gradient(135deg, #1b5e20, #2e7d32); color: white;
+            font-weight: 700; font-size: 0.82rem; border-radius: 25px;
+            cursor: pointer; transition: all 0.22s;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
         }
+        .buy-now-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(27, 94, 32, 0.45); background: linear-gradient(135deg, #0d3b0d, #1b5e20); }
 
-        .buy-now-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(27, 94, 32, 0.45);
-            background: linear-gradient(135deg, #0d3b0d, #1b5e20);
-        }
-
-        /* ── Single-Book PayPal Modal ── */
-        .single-modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.58);
-            z-index: 6000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .single-modal-overlay.open {
-            display: flex;
-        }
-
-        .single-modal {
-            background: white;
-            border-radius: 22px;
-            width: min(500px, 95vw);
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.28);
-            animation: smSlideUp 0.3s ease;
-        }
-
-        @keyframes smSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .sm-header {
-            background: linear-gradient(135deg, #0070ba, #003087);
-            padding: 22px 26px;
-            border-radius: 22px 22px 0 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: white;
-        }
-
-        .sm-header h2 {
-            font-size: 1.1rem;
-            margin: 0;
-        }
-
-        .sm-close {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sm-close:hover {
-            background: rgba(255, 255, 255, 0.35);
-        }
-
-        .sm-body {
-            padding: 26px;
-        }
-
-        .sm-book-info {
-            background: #f0f7ff;
-            border: 1px solid #c2d9f0;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 14px;
-            align-items: center;
-        }
-
-        .sm-book-emoji {
-            font-size: 2.4rem;
-        }
-
-        .sm-book-title {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #1a1a1a;
-            margin-bottom: 3px;
-        }
-
-        .sm-book-price {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #0070ba;
-        }
-
-        .sm-paypal-box {
-            background: linear-gradient(135deg, #f7f9ff, #eef4ff);
-            border: 2px solid #c2d4f0;
-            border-radius: 14px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .paypal-logo {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #003087;
-            margin-bottom: 6px;
-            letter-spacing: -1px;
-        }
-
-        .paypal-logo span {
-            color: #0070ba;
-        }
-
-        .sm-paypal-box p {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 4px;
-        }
-
-        .sm-paypal-email {
-            font-weight: 700;
-            color: #0070ba;
-            font-size: 1rem;
-        }
-
-        .sm-note {
-            background: #fff8e1;
-            border: 1px solid #ffc107;
-            border-radius: 10px;
-            padding: 11px 15px;
-            font-size: 0.83rem;
-            color: #7b5800;
-            margin-bottom: 18px;
-        }
-
-        .sm-txn-input {
-            margin-bottom: 16px;
-        }
-
-        .sm-txn-input label {
-            display: block;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 7px;
-            font-size: 0.9rem;
-        }
-
-        .sm-txn-input input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 0.96rem;
-            background: #f8f9fa;
-            transition: all 0.2s;
-            box-sizing: border-box;
-        }
-
-        .sm-txn-input input:focus {
-            outline: none;
-            border-color: #0070ba;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(0, 112, 186, 0.12);
-        }
-
-        .sm-txn-input input.valid {
-            border-color: #4CAF50;
-            background: #f8fdf8;
-        }
-
-        .sm-txn-input input.error {
-            border-color: #e74c3c;
-            background: #fff8f8;
-        }
-
-        .sm-hint {
-            font-size: 0.78rem;
-            color: #888;
-            margin-top: 4px;
-        }
-
-        .sm-valid-msg {
-            font-size: 0.84rem;
-            font-weight: 500;
-            min-height: 20px;
-            padding: 3px 0;
-        }
-
-        .sm-valid-msg.ok {
-            color: #4CAF50;
-        }
-
-        .sm-valid-msg.err {
-            color: #e74c3c;
-        }
-
-        .sm-confirm-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #0070ba, #003087);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s;
-            box-shadow: 0 6px 20px rgba(0, 112, 186, 0.35);
-        }
-
-        .sm-confirm-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(0, 112, 186, 0.45);
-        }
-
-        .sm-confirm-btn:disabled {
-            background: #bdbdbd;
-            box-shadow: none;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .sm-success {
-            text-align: center;
-            padding: 16px 0;
-        }
-
-        .sm-success .s-icon {
-            font-size: 60px;
-            margin-bottom: 12px;
-        }
-
-        .sm-success h3 {
-            font-size: 1.3rem;
-            color: #2e7d32;
-            margin-bottom: 8px;
-        }
-
-        .sm-success p {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 6px;
-        }
-
-        .sm-txn-badge {
-            background: #e8f5e9;
-            border: 1px solid #a5d6a7;
-            border-radius: 8px;
-            padding: 9px 14px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            color: #2e7d32;
-            margin: 10px 0;
-            font-weight: 700;
-        }
-
-        .sm-done-btn {
-            margin-top: 16px;
-            padding: 12px 32px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-
-        .sm-done-btn:hover {
-            background: #2e7d32;
-        }
+        /* ── Modals ── */
+        .single-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.58); z-index: 6000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .single-modal-overlay.open { display: flex; }
+        .single-modal { background: white; border-radius: 22px; width: min(500px, 95vw); max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 70px rgba(0,0,0,0.28); animation: smSlideUp 0.3s ease; }
+        @keyframes smSlideUp { from { opacity:0; transform:translateY(40px) } to { opacity:1; transform:translateY(0) } }
+        .sm-header { background: linear-gradient(135deg, #0070ba, #003087); padding: 22px 26px; border-radius: 22px 22px 0 0; display: flex; align-items: center; justify-content: space-between; color: white; }
+        .sm-header h2 { font-size: 1.1rem; margin: 0; }
+        .sm-close { background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .sm-close:hover { background: rgba(255,255,255,0.35); }
+        .sm-body { padding: 26px; }
+        .sm-book-info { background: #f0f7ff; border: 1px solid #c2d9f0; border-radius: 12px; padding: 16px; margin-bottom: 20px; display: flex; gap: 14px; align-items: center; }
+        .sm-book-emoji { font-size: 2.4rem; }
+        .sm-book-title { font-weight: 700; font-size: 1rem; color: #1a1a1a; margin-bottom: 3px; }
+        .sm-book-price { font-size: 1.4rem; font-weight: 800; color: #0070ba; }
+        .sm-paypal-box { background: linear-gradient(135deg, #f7f9ff, #eef4ff); border: 2px solid #c2d4f0; border-radius: 14px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .paypal-logo { font-size: 1.5rem; font-weight: 900; color: #003087; margin-bottom: 6px; letter-spacing: -1px; }
+        .paypal-logo span { color: #0070ba; }
+        .sm-paypal-box p { font-size: 0.9rem; color: #555; margin-bottom: 4px; }
+        .sm-paypal-email { font-weight: 700; color: #0070ba; font-size: 1rem; }
+        .sm-note { background: #fff8e1; border: 1px solid #ffc107; border-radius: 10px; padding: 11px 15px; font-size: 0.83rem; color: #7b5800; margin-bottom: 18px; }
+        .sm-txn-input { margin-bottom: 16px; }
+        .sm-txn-input label { display: block; font-weight: 600; color: #333; margin-bottom: 7px; font-size: 0.9rem; }
+        .sm-txn-input input { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.96rem; background: #f8f9fa; transition: all 0.2s; box-sizing: border-box; }
+        .sm-txn-input input:focus { outline: none; border-color: #0070ba; background: white; box-shadow: 0 0 0 3px rgba(0,112,186,0.12); }
+        .sm-txn-input input.valid { border-color: #4CAF50; background: #f8fdf8; }
+        .sm-txn-input input.error { border-color: #e74c3c; background: #fff8f8; }
+        .sm-hint { font-size: 0.78rem; color: #888; margin-top: 4px; }
+        .sm-valid-msg { font-size: 0.84rem; font-weight: 500; min-height: 20px; padding: 3px 0; }
+        .sm-valid-msg.ok { color: #4CAF50; }
+        .sm-valid-msg.err { color: #e74c3c; }
+        .sm-confirm-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #0070ba, #003087); color: white; border: none; border-radius: 25px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.25s; box-shadow: 0 6px 20px rgba(0,112,186,0.35); }
+        .sm-confirm-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,112,186,0.45); }
+        .sm-confirm-btn:disabled { background: #bdbdbd; box-shadow: none; cursor: not-allowed; transform: none; }
+        .sm-success { text-align: center; padding: 16px 0; }
+        .sm-success .s-icon { font-size: 60px; margin-bottom: 12px; }
+        .sm-success h3 { font-size: 1.3rem; color: #2e7d32; margin-bottom: 8px; }
+        .sm-success p { color: #666; font-size: 0.9rem; margin-bottom: 6px; }
+        .sm-txn-badge { background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 8px; padding: 9px 14px; font-family: monospace; font-size: 0.9rem; color: #2e7d32; margin: 10px 0; font-weight: 700; }
+        .sm-done-btn { margin-top: 16px; padding: 12px 32px; background: #4CAF50; color: white; border: none; border-radius: 25px; font-weight: 700; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; }
+        .sm-done-btn:hover { background: #2e7d32; }
 
         /* Welcome Modal */
-        .welcome-modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-        }
+        .welcome-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .welcome-modal-overlay.active { display: flex; }
+        .welcome-modal { background: white; border-radius: 20px; padding: 40px 36px; max-width: 440px; width: 92vw; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.25); animation: smSlideUp 0.35s ease; }
+        .welcome-modal-icon { font-size: 3rem; margin-bottom: 12px; }
+        .welcome-modal-title { font-size: 1.5rem; font-weight: 700; color: #1a2e1a; margin-bottom: 8px; }
+        .welcome-modal-name { font-size: 1rem; color: #4CAF50; font-weight: 600; margin-bottom: 6px; }
+        .welcome-modal-text { font-size: 0.9rem; color: #666; margin-bottom: 18px; }
+        .welcome-tip { font-size: 0.88rem; color: #444; padding: 7px 0; }
+        .welcome-modal-btn { margin-top: 18px; padding: 12px 30px; background: linear-gradient(135deg, #4CAF50, #2e7d32); color: white; border: none; border-radius: 25px; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
+        .welcome-modal-btn:hover { opacity: 0.9; }
 
-        .welcome-modal-overlay.active {
-            display: flex;
-        }
+        /* Seller welcome modal variant */
+        .seller-welcome-modal .welcome-modal { border-top: 4px solid #3949ab; }
+        .seller-welcome-modal .welcome-modal-title { color: #1a237e; }
+        .seller-welcome-modal .welcome-modal-name { color: #3949ab; }
+        .seller-welcome-modal .welcome-modal-btn { background: linear-gradient(135deg, #3949ab, #1a237e); }
 
-        .welcome-modal {
-            background: white;
-            border-radius: 20px;
-            padding: 40px 36px;
-            max-width: 440px;
-            width: 92vw;
-            text-align: center;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-            animation: smSlideUp 0.35s ease;
-        }
+        /* No books msg */
+        .no-books { text-align: center; padding: 60px 20px; grid-column: 1/-1; color: #aaa; font-size: 1.1rem; }
 
-        .welcome-modal-icon {
-            font-size: 3rem;
-            margin-bottom: 12px;
-        }
+        /* Loading spinner */
+        .books-loading { text-align: center; padding: 60px; grid-column: 1/-1; }
+        .spinner-lg { display: inline-block; width: 40px; height: 40px; border: 4px solid #e8f5e9; border-top-color: #4CAF50; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg) } }
 
-        .welcome-modal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1a2e1a;
-            margin-bottom: 8px;
+        @media (max-width: 900px) {
+            .seller-form-grid { grid-template-columns: 1fr 1fr; }
+            .seller-form-grid .full-col { grid-column: 1/-1; }
+            .seller-form-grid .two-col { grid-column: 1/-1; }
         }
-
-        .welcome-modal-name {
-            font-size: 1rem;
-            color: #4CAF50;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .welcome-modal-text {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 18px;
-        }
-
-        .welcome-tip {
-            font-size: 0.88rem;
-            color: #444;
-            padding: 7px 0;
-        }
-
-        .welcome-modal-btn {
-            margin-top: 18px;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #4CAF50, #2e7d32);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 0.95rem;
-        }
-
-        .welcome-modal-btn:hover {
-            opacity: 0.9;
+        @media (max-width: 600px) {
+            .seller-panel { padding: 22px 18px; }
+            .seller-form-grid { grid-template-columns: 1fr; }
+            .s-pay-methods { flex-wrap: wrap; }
         }
     </style>
 </head>
@@ -614,13 +291,16 @@
         <div class="logo">
             <img src="assets/logo.png" alt="Book4U Logo">
         </div>
+        <button class="hamburger" onclick="document.querySelector('header nav').classList.toggle('nav-open');this.classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
         <nav>
             <ul>
-                <li><a href="index.html" class="back-btn">← Back to Home</a></li>
-                <li><a href="contact.html" class="nav-link">Contact Us</a></li>
-                <li><a href="mycart.html" class="nav-link">My Cart</a></li>
-                <li><a href="about.html" class="nav-link">About Us</a></li>
-                <li><a href="login.html" class="nav-link" id="navLoginBtn">Login</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li class="active"><a href="shop.html">Shop</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="login.html" id="navLoginBtn">Login</a></li>
             </ul>
         </nav>
         <div class="header-icons">
@@ -628,9 +308,7 @@
                 <input type="search" placeholder="Search books..." id="searchInput">
                 <button id="searchBtn">🔍</button>
             </div>
-            <a href="mycart.html" style="text-decoration:none;">
-                <span id="cartIcon">🛒 <span id="cartCount">0</span></span>
-            </a>
+            <a href="mycart.html" class="cart-link">🛒 My Cart (<span id="cartCount">0</span>)</a>
         </div>
     </header>
 
@@ -638,11 +316,91 @@
         <section class="shop-section">
             <div class="shop-header">
                 <h1>📚 Book4U Shop</h1>
-                <p>Browse our collection and find your next favorite read</p>
+                <p id="shopSubtitle">Browse our collection and find your next favorite read</p>
                 <div class="stats-bar" id="statsBar">
                     <span>👥 <strong id="statUsers">—</strong> Members</span>
                     <span>📚 <strong id="statBooks">—</strong> Books</span>
                     <span>🛒 <strong id="statCarts">—</strong> Active Carts</span>
+                </div>
+            </div>
+
+            <!-- ═══ SELLER PANEL (hidden for buyers) ═══ -->
+            <div class="seller-panel" id="sellerPanel" style="display:none;">
+                <div style="max-width:1400px;margin:0 auto;padding:0 12px;">
+                    <div class="seller-panel-header">
+                        <div class="seller-panel-icon">🏪</div>
+                        <div>
+                            <div class="seller-panel-title">List a New Book</div>
+                            <div class="seller-panel-sub" id="sellerStoreLabel">Post your book and reach thousands of readers</div>
+                        </div>
+                    </div>
+
+                    <div class="seller-form-grid">
+                        <div>
+                            <label class="s-label">Book Title *</label>
+                            <input class="s-input" id="sTitle" placeholder="e.g. The Great Adventure" required>
+                        </div>
+                        <div>
+                            <label class="s-label">Author Name</label>
+                            <input class="s-input" id="sAuthor" placeholder="e.g. John Doe">
+                        </div>
+                        <div>
+                            <label class="s-label">Price (USD) *</label>
+                            <input class="s-input" id="sPrice" type="number" min="0.01" step="0.01" placeholder="e.g. 12.99" required>
+                        </div>
+
+                        <div class="full-col">
+                            <label class="s-label">Book Description</label>
+                            <textarea class="s-textarea" id="sDesc" placeholder="Write a brief description of the book..."></textarea>
+                        </div>
+
+                        <div>
+                            <label class="s-label">Category *</label>
+                            <select class="s-select" id="sCategory" required>
+                                <option value="">Select category...</option>
+                                <option value="fiction">Fiction</option>
+                                <option value="educational">Educational</option>
+                                <option value="non-fiction">Non-Fiction</option>
+                                <option value="anime mangas">Anime Mangas</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+                        <div class="two-col">
+                            <label class="s-label">Book Cover Image *</label>
+                            <input class="s-input" type="file" id="sImageFile" accept="image/*" required>
+                        </div>
+                        <div>
+                            <label class="s-label">Availability / Status</label>
+                            <select class="s-select" id="sStatus">
+                                <option value="In Stock">In Stock</option>
+                                <option value="New">New Arrival</option>
+                                <option value="Bestseller">Bestseller</option>
+                                <option value="Sold Out">Sold Out</option>
+                            </select>
+                        </div>
+
+                        <div class="full-col">
+                            <label class="s-label">Payment Method for This Book</label>
+                            <div class="s-pay-methods">
+                                <div class="s-pay-opt selected" data-method="paypal" onclick="selectSellerPay('paypal',this)">
+                                    <span class="s-pay-icon">🅿️</span>PayPal
+                                </div>
+                                <div class="s-pay-opt" data-method="bank" onclick="selectSellerPay('bank',this)">
+                                    <span class="s-pay-icon">🏦</span>Bank Transfer
+                                </div>
+                                <div class="s-pay-opt" data-method="mpesa" onclick="selectSellerPay('mpesa',this)">
+                                    <span class="s-pay-icon">📱</span>M-Pesa
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="full-col">
+                            <button class="seller-post-btn" id="sellerPostBtn" onclick="postSellerBook()">
+                                📦 Post Book to Store
+                            </button>
+                            <div class="seller-msg" id="sellerMsg"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -652,193 +410,37 @@
                 <button class="category-card" data-category="fiction">Fiction</button>
                 <button class="category-card" data-category="educational">Educational</button>
                 <button class="category-card" data-category="non-fiction">Non-Fiction</button>
-                <button class="category-card" data-category="anime mangas">anime mangass</button>
+                <button class="category-card" data-category="anime mangas">Anime Mangas</button>
+                <button class="category-card" data-category="general">General</button>
             </div>
 
             <div class="shop-container">
                 <div class="shop-products" id="shopProducts">
-               <div class="shop-card" data-category="educational">
-    <div class="shop-card-image"><img src="assets/book1.jpg" alt="Learning Python"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">Learning Python</h4>
-        <p class="shop-card-author">By Sarah J.</p>
-        <p class="shop-card-description">Master Python programming from basics to advanced concepts with practical examples.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Education, Tech | <strong>Pages:</strong> 400</p>
-        <div class="shop-card-price"><span class="current-price">$14.99</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="1" data-title="Learning Python" data-price="14.99" data-category="educational">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('1','Learning Python',14.99)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="educational">
-    <div class="shop-card-image"><img src="assets/book2.jpg" alt="Mastering Linux"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">Mastering Linux</h4>
-        <p class="shop-card-author">By Linus T.</p>
-        <p class="shop-card-description">The ultimate guide to understanding Linux kernels, terminal commands, and system security.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Education, OS | <strong>Pages:</strong> 350</p>
-        <div class="shop-card-price"><span class="current-price">$19.99</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="2" data-title="Mastering Linux" data-price="19.99" data-category="educational">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('2','Mastering Linux',19.99)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="educational">
-    <div class="shop-card-image"><img src="assets/book3.jpg" alt="Web Development 101"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">Web Development 101</h4>
-        <p class="shop-card-author">By Dev Team</p>
-        <p class="shop-card-description">Learn HTML, CSS, and JavaScript to build your very first responsive website from scratch.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Education, Web | <strong>Pages:</strong> 280</p>
-        <div class="shop-card-price"><span class="current-price">$12.99</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="3" data-title="Web Development 101" data-price="12.99" data-category="educational">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('3','Web Development 101',12.99)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="fiction">
-    <div class="shop-card-image"><img src="assets/book4.jpg" alt="The Silent Forest"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">The Silent Forest</h4>
-        <p class="shop-card-author">By Emma Woods</p>
-        <p class="shop-card-description">A thrilling mystery thriller set on a secluded island. Uncover secrets and solve puzzles.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Mystery, Thriller | <strong>Pages:</strong> 320</p>
-        <div class="shop-card-price"><span class="current-price">$11.99</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="4" data-title="The Silent Forest" data-price="11.99" data-category="fiction">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('4','The Silent Forest',11.99)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="fiction">
-    <div class="shop-card-image"><img src="assets/book5.jpg" alt="Echoes of Time"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">Echoes of Time</h4>
-        <p class="shop-card-author">By Arthur C.</p>
-        <p class="shop-card-description">An epic tale of courage and discovery as a traveler journeys across different historical eras.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Sci-Fi, Adventure | <strong>Pages:</strong> 410</p>
-        <div class="shop-card-price"><span class="current-price">$15.50</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="5" data-title="Echoes of Time" data-price="15.50" data-category="fiction">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('5','Echoes of Time',15.50)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="fiction">
-    <div class="shop-card-image"><img src="assets/book6.jpg" alt="The Last Hero"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">The Last Hero</h4>
-        <p class="shop-card-author">By Jack Black</p>
-        <p class="shop-card-description">In a world falling to darkness, one unlikely hero rises to face an ancient, forgotten magic.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Fantasy, Action | <strong>Pages:</strong> 290</p>
-        <div class="shop-card-price"><span class="current-price">$13.99</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="6" data-title="The Last Hero" data-price="13.99" data-category="fiction">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('6','The Last Hero',13.99)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="non-fiction">
-    <div class="shop-card-image"><img src="assets/book7.jpg" alt="History Uncovered"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">History Uncovered</h4>
-        <p class="shop-card-author">By Robert B.</p>
-        <p class="shop-card-description">Explore untold stories from history that shaped our world. A comprehensive journey through time.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> History, Biography | <strong>Pages:</strong> 380</p>
-        <div class="shop-card-price"><span class="current-price">$16.99</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="7" data-title="History Uncovered" data-price="16.99" data-category="non-fiction">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('7','History Uncovered',16.99)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="non-fiction">
-    <div class="shop-card-image"><img src="assets/book8.jpg" alt="Atomic Habits"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">Atomic Habits</h4>
-        <p class="shop-card-author">By James Clear</p>
-        <p class="shop-card-description">An easy and proven way to build good habits and break bad ones through small, daily changes.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Self-Help, Psychology | <strong>Pages:</strong> 320</p>
-        <div class="shop-card-price"><span class="current-price">$18.00</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="8" data-title="Atomic Habits" data-price="18.00" data-category="non-fiction">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('8','Atomic Habits',18.00)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="non-fiction">
-    <div class="shop-card-image"><img src="assets/book9.jpg" alt="Deep Work"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">Deep Work</h4>
-        <p class="shop-card-author">By Cal Newport</p>
-        <p class="shop-card-description">Master the art of focused success in a distracted world and produce better results in less time.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Business, Productivity | <strong>Pages:</strong> 300</p>
-        <div class="shop-card-price"><span class="current-price">$17.50</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="9" data-title="Deep Work" data-price="17.50" data-category="non-fiction">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('9','Deep Work',17.50)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="anime mangas">
-    <div class="shop-card-image"><img src="assets/book10.jpg" alt="Jujutsu Battles Vol 1"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">Jujutsu Battles Vol 1</h4>
-        <p class="shop-card-author">By Gege A.</p>
-        <p class="shop-card-description">A world of curses, sorcerers, and epic fights. Join the battle to protect humanity from dark spirits.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Manga, Action | <strong>Pages:</strong> 200</p>
-        <div class="shop-card-price"><span class="current-price">$9.99</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="10" data-title="Jujutsu Battles Vol 1" data-price="9.99" data-category="anime mangas">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('10','Jujutsu Battles Vol 1',9.99)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="anime mangas">
-    <div class="shop-card-image"><img src="assets/book11.jpg" alt="Ninja Chronicles"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">Ninja Chronicles</h4>
-        <p class="shop-card-author">By Masashi K.</p>
-        <p class="shop-card-description">Follow the journey of a young ninja as he trains to become the strongest warrior in his village.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Manga, Adventure | <strong>Pages:</strong> 190</p>
-        <div class="shop-card-price"><span class="current-price">$8.99</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="11" data-title="Ninja Chronicles" data-price="8.99" data-category="anime mangas">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('11','Ninja Chronicles',8.99)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
-
-<div class="shop-card" data-category="anime mangas">
-    <div class="shop-card-image"><img src="assets/book12.jpg" alt="Hero Academy"></div>
-    <div class="shop-card-content">
-        <h4 class="shop-card-title">Hero Academy</h4>
-        <p class="shop-card-author">By Kohei H.</p>
-        <p class="shop-card-description">In a world where everyone has superpowers, one boy without any power fights to enter the top academy.</p>
-        <p class="shop-card-genre"><strong>Genre:</strong> Manga, Shonen | <strong>Pages:</strong> 210</p>
-        <div class="shop-card-price"><span class="current-price">$10.50</span></div>
-        <div class="shop-card-actions">
-            <button class="add-to-cart-btn add-to-cart" data-id="12" data-title="Hero Academy" data-price="10.50" data-category="anime mangas">🛒 Add to Cart</button>
-            <button class="buy-now-btn" onclick="openSinglePayment('12','Hero Academy',10.50)">🅿 Pay Now</button>
-        </div>
-    </div>
-</div>
+                    <div class="books-loading">
+                        <div class="spinner-lg"></div>
+                        <p style="margin-top:14px;color:#aaa;">Loading books...</p>
+                    </div>
+                </div>
+            <div class="shop-header">
+                <h1>📚 Our Collection</h1>
+                <p>Browse through hundreds of titles from our community.</p>
+                
+                <!-- Live Stats Bar (Real-Time) -->
+                <div class="live-stats-bar" style="margin-top: 20px; background: rgba(76, 175, 80, 0.05); padding: 15px; border-radius: 15px; display: inline-flex; border: 1px dashed #4CAF50;">
+                    <div class="stat-item" style="padding: 0 25px; border-right: 1px solid #eee;">
+                        <span class="stat-number" id="statUsers">0</span>
+                        <span class="stat-label" style="font-size: 0.75rem;">Total Members</span>
+                    </div>
+                    <div class="stat-item" style="padding: 0 25px; border-right: 1px solid #eee;">
+                        <span class="stat-number" id="statBooks">0</span>
+                        <span class="stat-label" style="font-size: 0.75rem;">Books Listed</span>
+                    </div>
+                    <div class="stat-item" style="padding: 0 25px;">
+                        <span class="stat-number" id="statCarts">0</span>
+                        <span class="stat-label" style="font-size: 0.75rem;">Active Carts</span>
+                    </div>
                 </div>
             </div>
-        </section>
     </main>
 
     <footer>
@@ -847,73 +449,54 @@
 
     <!-- Welcome Modal for New Users -->
     <div class="welcome-modal-overlay" id="welcomeModal">
-        <div class="welcome-modal">
-            <div class="welcome-modal-icon">🎉</div>
-            <h2 class="welcome-modal-title">Welcome to Book4U!</h2>
+        <div class="welcome-modal" id="welcomeModalBox">
+            <div class="welcome-modal-icon" id="welcomeIcon">🎉</div>
+            <h2 class="welcome-modal-title" id="welcomeTitle">Welcome to Book4U!</h2>
             <p class="welcome-modal-name" id="welcomeUserName"></p>
-            <p class="welcome-modal-text">Your account has been created successfully! Here are a few things you can do:
-            </p>
-            <div class="welcome-modal-tips">
-                <div class="welcome-tip">📚 <strong>Browse</strong> our collection of books below</div>
-                <div class="welcome-tip">🛒 <strong>Add to Cart</strong> any book you like</div>
-                <div class="welcome-tip">🅿️ <strong>Buy Now</strong> for instant PayPal payment per book</div>
-            </div>
-            <button class="welcome-modal-btn" id="welcomeModalClose">Start Shopping →</button>
+            <p class="welcome-modal-text" id="welcomeText">Your account has been created successfully!</p>
+            <div class="welcome-modal-tips" id="welcomeTips"></div>
+            <button class="welcome-modal-btn" id="welcomeModalClose">Let's Go →</button>
         </div>
     </div>
 
-    <!-- ════ SINGLE-BOOK PayPal PAYMENT MODAL ════ -->
+    <!-- Single-Book PayPal Payment Modal -->
     <div class="single-modal-overlay" id="singlePayModal" onclick="maybeSingleClose(event)">
         <div class="single-modal" id="singlePayModalBox">
-
-            <!-- Header -->
             <div class="sm-header">
                 <h2>🅿 PayPal — Instant Purchase</h2>
                 <button class="sm-close" onclick="closeSinglePayment()">✕</button>
             </div>
-
             <div class="sm-body">
-                <!-- Payment view -->
                 <div id="smPayView">
-                    <!-- Book info summary -->
                     <div class="sm-book-info">
                         <div class="sm-book-emoji">📚</div>
                         <div>
                             <div class="sm-book-title" id="smBookTitle">Book Title</div>
-                            <div class="sm-book-price" id="smBookPrice">$0.00</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                                <span class="sm-book-price" id="smBookPrice">$0.00</span>
+                                <span id="smBookCount" style="background:#e8f5e9; color:#2e7d32; padding:2px 8px; border-radius:10px; font-size:0.75rem; font-weight:700;">1 book</span>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- PayPal instructions -->
                     <div class="sm-paypal-box">
                         <div class="paypal-logo">Pay<span>Pal</span></div>
                         <p>Send your payment to:</p>
                         <div class="sm-paypal-email">payments@book4u.com</div>
-                        <p style="margin-top:6px;font-size:0.8rem;color:#777;">Include the book title in your payment
-                            note</p>
+                        <p style="margin-top:6px;font-size:0.8rem;color:#777;">Include the book title in your payment note</p>
                     </div>
-
                     <div class="sm-note">
-                        ⚠️ After sending payment via PayPal, enter your <strong>PayPal Transaction ID</strong> below to
-                        confirm your purchase.
+                        ⚠️ After sending payment via PayPal, enter your <strong>PayPal Transaction ID</strong> below to confirm your purchase.
                     </div>
-
-                    <!-- Transaction ID Input -->
                     <div class="sm-txn-input">
                         <label>PayPal Transaction ID *</label>
-                        <input type="text" id="smTxnInput" placeholder="e.g. 5O190127TN364715T"
-                            oninput="validateSmTxn()">
-                        <div class="sm-hint">17 alphanumeric characters — found in your PayPal payment confirmation
-                            email</div>
+                        <input type="text" id="smTxnInput" placeholder="e.g. 5O190127TN364715T" oninput="validateSmTxn()">
+                        <div class="sm-hint">17 alphanumeric characters — found in your PayPal confirmation email</div>
                         <div class="sm-valid-msg" id="smValidMsg"></div>
                     </div>
-
                     <button class="sm-confirm-btn" id="smConfirmBtn" onclick="confirmSinglePurchase()" disabled>
                         ✅ Confirm Purchase
                     </button>
                 </div>
-
-                <!-- Success view -->
                 <div id="smSuccessView" style="display:none;">
                     <div class="sm-success">
                         <div class="s-icon">🎉</div>
@@ -930,18 +513,315 @@
 
     <script src="script.js"></script>
     <script>
-        // ── Single-Book Payment State ──
+        // ── State ──
         let _smBookId = '', _smBookTitle = '', _smBookPrice = 0;
+        let _sellerPayMethod = 'paypal';
+        let _allBooks = [];
+        let _currentCategory = 'all';
+        let _currentSearch = '';
 
+        // ── On page load ──
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = getLoggedInUser();
+
+            // Show logout button if user is logged in
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn && user) logoutBtn.style.display = 'inline-block';
+
+            // Seller-specific UI
+            if (user && user.accountType === 'seller') {
+                document.getElementById('sellerPanel').style.display = 'block';
+                document.getElementById('shopSubtitle').textContent = 'Manage your listings and browse the marketplace';
+                const sellerLabel = document.getElementById('sellerStoreLabel');
+                if (sellerLabel && user.storeName) {
+                    sellerLabel.textContent = `Store: ${user.storeName} — Add a new listing below`;
+                }
+                // Pre-set payment method from user preference
+                if (user.paymentPreference) {
+                    selectSellerPay(user.paymentPreference, document.querySelector(`[data-method="${user.paymentPreference}"]`) || document.querySelector('.s-pay-opt'));
+                }
+            }
+
+            // Restore nav login btn
+            const navLoginBtn = document.getElementById('navLoginBtn');
+            if (navLoginBtn && user) {
+                navLoginBtn.textContent = `👤 ${user.fullname || user.username || 'Account'}`;
+                navLoginBtn.href = 'mycart.html';
+            }
+
+            // Show welcome modal
+            initWelcomeModalShop(user);
+
+            // Load stats
+            loadLiveStats();
+
+            // Load books
+            await fetchAndRenderBooks();
+
+            // Setup category filter
+            initCategoryFilter();
+
+            // Setup search
+            initSearch();
+
+            updateCartDisplay();
+        });
+
+        // ── Seller payment method selection ──
+        function selectSellerPay(method, el) {
+            _sellerPayMethod = method;
+            document.querySelectorAll('.s-pay-opt').forEach(o => o.classList.remove('selected'));
+            if (el) el.classList.add('selected');
+        }
+        window.selectSellerPay = selectSellerPay;
+
+        // ── Post book as seller ──
+        async function postSellerBook() {
+            const title = document.getElementById('sTitle').value.trim();
+            const author = document.getElementById('sAuthor').value.trim();
+            const price = document.getElementById('sPrice').value;
+            const desc = document.getElementById('sDesc').value.trim();
+            const category = document.getElementById('sCategory').value;
+            const imageUrl = document.getElementById('sImageUrl').value.trim();
+            const status = document.getElementById('sStatus').value; // COLLECT STATUS
+            const msgEl = document.getElementById('sellerMsg');
+            const btn = document.getElementById('sellerPostBtn');
+
+            msgEl.className = 'seller-msg';
+            msgEl.textContent = '';
+
+            if (!title || !price || !category) {
+                msgEl.textContent = '⚠️ Please fill in Title, Price, and Category.';
+                msgEl.className = 'seller-msg err';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Posting...';
+
+            try {
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('author', author);
+                formData.append('price', price);
+                formData.append('description', desc);
+                formData.append('category', category);
+                formData.append('status', status);
+                formData.append('paymentMethod', _sellerPayMethod);
+
+                const fileInput = document.getElementById('sImageFile');
+                if (fileInput.files[0]) {
+                    formData.append('bookImage', fileInput.files[0]);
+                }
+
+                const res = await fetch('/api/seller/post-book', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    msgEl.textContent = '✅ Book posted successfully! It is now visible in the shop.';
+                    msgEl.className = 'seller-msg ok';
+                    // Clear form
+                    ['sTitle','sAuthor','sPrice','sDesc'].forEach(id => { document.getElementById(id).value = ''; });
+                    document.getElementById('sImageFile').value = '';
+                    document.getElementById('sCategory').value = '';
+                    document.getElementById('sStatus').value = 'In Stock'; 
+                    // Reload books
+                    await fetchAndRenderBooks();
+                } else {
+                    msgEl.textContent = '❌ ' + (data.message || 'Failed to post book.');
+                    msgEl.className = 'seller-msg err';
+                }
+            } catch (err) {
+                msgEl.textContent = '❌ Cannot connect to server.';
+                msgEl.className = 'seller-msg err';
+            }
+
+            btn.disabled = false;
+            btn.textContent = '📦 Post Book to Store';
+        }
+        window.postSellerBook = postSellerBook;
+
+        // ── Fetch and render books ──
+        async function fetchAndRenderBooks() {
+            try {
+                const res = await fetch('/api/books');
+                const data = await res.json();
+                _allBooks = data.books || data || [];
+                renderBooks();
+            } catch (err) {
+                document.getElementById('shopProducts').innerHTML = '<div class="no-books">⚠️ Could not load books. Make sure the server is running.</div>';
+            }
+        }
+
+        function renderBooks() {
+            const container = document.getElementById('shopProducts');
+            const q = _currentSearch.toLowerCase();
+
+            const filtered = _allBooks.filter(book => {
+                const matchCat = _currentCategory === 'all' || (book.category || '').toLowerCase() === _currentCategory;
+                const matchSearch = !q || (book.title || '').toLowerCase().includes(q) || (book.author || '').toLowerCase().includes(q);
+                return matchCat && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="no-books">📭 No books found. Try a different category or search term.</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            filtered.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'shop-card';
+                card.dataset.category = (book.category || 'general').toLowerCase();
+
+                const imgSrc = (book.image || book.imageUrl || '').trim();
+                const imgHtml = imgSrc
+                    ? `<img src="${escHtml(imgSrc)}" alt="${escHtml(book.title)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+                    : '';
+                const placeholderHtml = `<div class="book-placeholder" style="display:${imgSrc ? 'none' : 'flex'}">
+                    <div class="book-placeholder-inner">
+                        <span class="book-placeholder-emoji">📚</span>
+                        <span class="book-placeholder-title">${escHtml(book.title)}</span>
+                    </div>
+                </div>`;
+
+                const sellerBadge = book.isSellerBook ? `<div class="seller-book-badge">Seller</div>` : '';
+                const origPriceHtml = book.origPrice ? `<span class="original-price">$${parseFloat(book.origPrice).toFixed(2)}</span>` : '';
+
+                card.innerHTML = `
+                    ${sellerBadge}
+                    <div class="shop-card-image">
+                        ${imgHtml}
+                        ${placeholderHtml}
+                    </div>
+                    <div class="shop-card-content">
+                        <h3 class="shop-card-title">${escHtml(book.title)}</h3>
+                        <p class="shop-card-author">By ${escHtml(book.author || 'Unknown')}</p>
+                        <p class="shop-card-description">${escHtml(book.description || '')}</p>
+                        <p class="shop-card-genre">📂 ${escHtml((book.category || 'general').charAt(0).toUpperCase() + (book.category || 'general').slice(1))}</p>
+                        <div class="shop-card-price" style="background: #f1f8f1; padding: 5px 10px; border-radius: 8px; width: fit-content;">
+                            <span class="current-price" style="font-size: 1.3rem; color: #1b5e20;">$${parseFloat(book.price).toFixed(2)}</span>
+                            ${origPriceHtml}
+                        </div>
+                        ${book.status ? `<div class="book-status-badge ${book.status.toLowerCase().replace(' ', '-')}">${escHtml(book.status)}</div>` : ''}
+                        <div class="shop-card-actions">
+                            <button class="add-to-cart-btn add-to-cart"
+                                data-id="${escHtml(book.bookId || book._id)}"
+                                data-title="${escHtml(book.title)}"
+                                data-price="${book.price}"
+                                data-category="${escHtml(book.category || 'general')}"
+                                data-status="${escHtml(book.status || 'In Stock')}"
+                                ${book.status === 'Sold Out' ? 'disabled' : ''}>
+                                ${book.status === 'Sold Out' ? '🚫 Out of Stock' : '🛒 Add to Cart'}
+                            </button>
+                            <button class="buy-now-btn"
+                                onclick="openSinglePayment('${escHtml(book.bookId || book._id)}','${escHtml(book.title).replace(/'/g,"\\'")}',${book.price})"
+                                ${book.status === 'Sold Out' ? 'disabled style="opacity:0.6; cursor:not-allowed;"' : ''}>
+                                ${book.status === 'Sold Out' ? 'Sold Out' : '⚡ Buy Now'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Re-attachment of listeners is no longer needed as script.js uses delegation
+        }
+
+        // ── Category filter ──
+        function initCategoryFilter() {
+            const cards = document.querySelectorAll('.category-card');
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    cards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    _currentCategory = card.dataset.category;
+                    renderBooks();
+                    // Track category view
+                    if (_currentCategory !== 'all') {
+                        fetch('/api/track-view', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ category: _currentCategory })
+                        }).catch(() => {});
+                    }
+                });
+            });
+
+            // Handle URL param
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlCat = urlParams.get('category');
+            if (urlCat) {
+                _currentCategory = urlCat;
+                cards.forEach(c => c.classList.toggle('active', c.dataset.category === urlCat));
+                renderBooks();
+            }
+        }
+
+        // ── Search ──
+        function initSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            if (searchInput) {
+                searchInput.addEventListener('input', () => { _currentSearch = searchInput.value; renderBooks(); });
+            }
+            if (searchBtn) {
+                searchBtn.addEventListener('click', () => { if (searchInput) { _currentSearch = searchInput.value; renderBooks(); } });
+            }
+        }
+
+        // ── Welcome Modal ──
+        function initWelcomeModalShop(user) {
+            const newUserName = localStorage.getItem('newUser');
+            const welcomeModal = document.getElementById('welcomeModal');
+            if (!newUserName || !welcomeModal) return;
+
+            const isSeller = user && user.accountType === 'seller';
+
+            document.getElementById('welcomeUserName').textContent = `Hello, ${newUserName}! 👋`;
+            if (isSeller) {
+                document.getElementById('welcomeIcon').textContent = '🏪';
+                document.getElementById('welcomeTitle').textContent = 'Welcome, Seller!';
+                document.getElementById('welcomeText').textContent = 'Your seller account is ready! Here\'s how to get started:';
+                document.getElementById('welcomeTips').innerHTML = `
+                    <div class="welcome-tip">📦 <strong>List Books</strong> using the seller panel above</div>
+                    <div class="welcome-tip">💰 <strong>Set Your Price</strong> and choose a payment method</div>
+                    <div class="welcome-tip">🌍 <strong>Reach Thousands</strong> of readers on Book4U</div>
+                `;
+                welcomeModal.classList.add('seller-welcome-modal');
+                document.getElementById('welcomeModalClose').textContent = 'Start Selling →';
+            } else {
+                document.getElementById('welcomeTips').innerHTML = `
+                    <div class="welcome-tip">📚 <strong>Browse</strong> our collection of books below</div>
+                    <div class="welcome-tip">🛒 <strong>Add to Cart</strong> any book you like</div>
+                    <div class="welcome-tip">⚡ <strong>Buy Now</strong> for instant PayPal payment per book</div>
+                `;
+            }
+
+            welcomeModal.classList.add('active');
+
+            document.getElementById('welcomeModalClose').addEventListener('click', () => {
+                welcomeModal.classList.remove('active');
+                localStorage.removeItem('newUser');
+            });
+            welcomeModal.addEventListener('click', (e) => {
+                if (e.target === welcomeModal) {
+                    welcomeModal.classList.remove('active');
+                    localStorage.removeItem('newUser');
+                }
+            });
+        }
+
+        // ── Single-Book Payment ──
         function openSinglePayment(id, title, price) {
-            _smBookId = id;
-            _smBookTitle = title;
-            _smBookPrice = parseFloat(price);
-
+            _smBookId = id; _smBookTitle = title; _smBookPrice = parseFloat(price);
             document.getElementById('smBookTitle').textContent = title;
             document.getElementById('smBookPrice').textContent = '$' + _smBookPrice.toFixed(2);
-
-            // Reset state
+            const smCount = document.getElementById('smBookCount');
+            if (smCount) smCount.textContent = '1 book';
             document.getElementById('smTxnInput').value = '';
             document.getElementById('smTxnInput').className = '';
             document.getElementById('smValidMsg').textContent = '';
@@ -949,7 +829,6 @@
             document.getElementById('smConfirmBtn').disabled = true;
             document.getElementById('smPayView').style.display = 'block';
             document.getElementById('smSuccessView').style.display = 'none';
-
             document.getElementById('singlePayModal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
@@ -971,23 +850,13 @@
             const msg = document.getElementById('smValidMsg');
             const btn = document.getElementById('smConfirmBtn');
             const raw = input.value.trim().toUpperCase();
-
-            if (!raw) {
-                input.className = '';
-                msg.textContent = '';
-                msg.className = 'sm-valid-msg';
-                btn.disabled = true;
-                return;
-            }
-
-            // PayPal IDs: 17 alphanumeric chars
+            if (!raw) { input.className = ''; msg.textContent = ''; msg.className = 'sm-valid-msg'; btn.disabled = true; return; }
             const valid = /^[A-Z0-9]{17}$/.test(raw);
             input.className = valid ? 'valid' : 'error';
             msg.className = 'sm-valid-msg ' + (valid ? 'ok' : 'err');
-            msg.textContent = valid
-                ? '✅ Valid PayPal transaction ID'
+            msg.textContent = valid ? '✅ Valid PayPal transaction ID'
                 : (raw.length < 17 ? `❌ PayPal IDs are 17 characters (you have ${raw.length})`
-                    : raw.length > 17 ? `❌ Too long — PayPal IDs are exactly 17 characters`
+                    : raw.length > 17 ? '❌ Too long — PayPal IDs are exactly 17 characters'
                         : '❌ Only letters and numbers allowed');
             btn.disabled = !valid;
         }
@@ -998,10 +867,8 @@
             const btn = document.getElementById('smConfirmBtn');
             const txnId = input.value.trim().toUpperCase();
             if (!txnId) return;
-
             btn.disabled = true;
             btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.4);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;"></span>Processing...';
-
             const user = typeof getLoggedInUser === 'function' ? getLoggedInUser() : null;
             try {
                 const res = await fetch('/api/purchase', {
@@ -1021,18 +888,65 @@
                     document.getElementById('smPayView').style.display = 'none';
                     document.getElementById('smSuccessView').style.display = 'block';
                 } else {
-                    btn.disabled = false;
-                    btn.textContent = '✅ Confirm Purchase';
-                    alert('❌ ' + (data.message || 'Purchase failed. Please try again.'));
+                    btn.disabled = false; btn.textContent = '✅ Confirm Purchase';
+                    alert('❌ ' + (data.message || 'Purchase failed.'));
                 }
             } catch (err) {
-                btn.disabled = false;
-                btn.textContent = '✅ Confirm Purchase';
-                alert('❌ Cannot connect to server. Check your connection.');
+                btn.disabled = false; btn.textContent = '✅ Confirm Purchase';
+                alert('❌ Cannot connect to server.');
             }
         }
         window.confirmSinglePurchase = confirmSinglePurchase;
     </script>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand footer-col">
+                <div class="footer-logo">📚 Book4U</div>
+                <p>Your ultimate destination for buying and selling books. Discover thousands of titles across every genre.</p>
+                <div class="footer-socials">
+                    <a href="#" class="footer-social-btn">📘</a>
+                    <a href="#" class="footer-social-btn">🐦</a>
+                    <a href="#" class="footer-social-btn">📷</a>
+                    <a href="#" class="footer-social-btn">✉️</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop Books</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="buyer_signup.html">Buyer Sign Up</a></li>
+                    <li><a href="seller_signup.html">Seller Sign Up</a></li>
+                    <li><a href="mycart.html" class="cart-link">🛒 My Cart</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-newsletter">
+                <h4>Stay Updated</h4>
+                <p>Get the latest book drops and deals straight to your inbox.</p>
+                <div class="footer-newsletter-form">
+                    <input type="email" placeholder="your@email.com">
+                    <button type="button">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Book4U. All rights reserved.</p>
+            <div class="footer-badges">
+                <span class="footer-badge">🔒 Secure Payments</span>
+                <span class="footer-badge">🚚 Fast Delivery</span>
+                <span class="footer-badge">⭐ Top Rated</span>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

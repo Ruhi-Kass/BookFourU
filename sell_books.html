@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Books - Book4U</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="assets/logo.png" alt="Book4U Logo">
+        </div>
+        <button class="hamburger" onclick="document.querySelector('header nav').classList.toggle('nav-open');this.classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="sell_books.html" class="active">Sell Books</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div class="header-icons">
+            <a href="mycart.html" class="cart-link">🛒 My Cart (<span id="cartCount">0</span>)</a>
+        </div>
+    </header>
+    <main>
+        <form id="sellBookForm" enctype="multipart/form-data">
+            <label for="bookTitle">Book Title:</label>
+            <input type="text" id="bookTitle" name="bookTitle" required>
+
+            <label for="bookAuthor">Author:</label>
+            <input type="text" id="bookAuthor" name="bookAuthor" required>
+
+            <label for="bookDescription">Description:</label>
+            <textarea id="bookDescription" name="bookDescription" required></textarea>
+
+            <label for="bookPrice">Price:</label>
+            <input type="number" id="bookPrice" name="bookPrice" step="0.01" min="0.01" required>
+
+            <label for="bookCategory">Category:</label>
+            <select id="bookCategory" name="bookCategory">
+                <option value="general">General</option>
+                <option value="fiction">Fiction</option>
+                <option value="educational">Educational</option>
+                <option value="non-fiction">Non-Fiction</option>
+                <option value="anime mangas">Anime Mangas</option>
+            </select>
+
+            <label for="bookImageFile">Book Cover Image:</label>
+            <input type="file" id="bookImageFile" name="bookImage" accept="image/*">
+
+            <div id="sellMsg" style="margin-top:10px; font-weight:600;"></div>
+            <button type="submit">Post Book</button>
+        </form>
+    </main>
+
+    <script>
+        // Restrict access to sellers only
+        const userType = document.cookie.split('; ').find(row => row.startsWith('userType='))?.split('=')[1];
+        if (userType !== 'seller') {
+            alert('Access denied. Only sellers can access this page.');
+            window.location.href = '/';
+        }
+
+        // Handle form submission via fetch (sends cookies for auth)
+        document.getElementById('sellBookForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msgEl = document.getElementById('sellMsg');
+            const btn = e.target.querySelector('button[type="submit"]');
+
+            msgEl.textContent = '';
+            msgEl.style.color = '';
+            btn.disabled = true;
+            btn.textContent = '⏳ Posting...';
+
+            try {
+                const formData = new FormData();
+                formData.append('bookTitle', document.getElementById('bookTitle').value.trim());
+                formData.append('bookAuthor', document.getElementById('bookAuthor').value.trim());
+                formData.append('bookDescription', document.getElementById('bookDescription').value.trim());
+                formData.append('bookPrice', document.getElementById('bookPrice').value);
+                formData.append('category', document.getElementById('bookCategory').value);
+                
+                const fileInput = document.getElementById('bookImageFile');
+                if (fileInput.files[0]) {
+                    formData.append('bookImage', fileInput.files[0]);
+                }
+
+                const res = await fetch('/api/sell-book', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    msgEl.textContent = '✅ Book posted successfully! It is now visible in the shop.';
+                    msgEl.style.color = 'green';
+                    e.target.reset();
+                } else {
+                    msgEl.textContent = '❌ ' + (data.message || 'Failed to post book.');
+                    msgEl.style.color = 'red';
+                }
+            } catch (err) {
+                msgEl.textContent = '❌ Cannot connect to server.';
+                msgEl.style.color = 'red';
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Post Book';
+        });
+    </script>
+</body>
+</html>

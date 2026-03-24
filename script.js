@@ -44,6 +44,25 @@ function updateCartDisplay() {
     const cart = getCart();
     const cartCount = document.getElementById('cartCount');
     if (cartCount) cartCount.textContent = cart.length;
+
+    // Also update all "Add to Cart" buttons on the page to reflect current cart state
+    const cartIds = new Set(cart.map(item => item.id));
+    document.querySelectorAll('.add-to-cart, .add-to-cart-btn').forEach(btn => {
+        if (cartIds.has(btn.dataset.id)) {
+            btn.textContent = 'Already in Cart';
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            btn.style.cursor = 'not-allowed';
+        } else if (btn.dataset.status !== 'Sold Out') {
+            // Only re-enable if it's not sold out
+            if (btn.disabled && btn.textContent === 'Already in Cart') {
+                btn.textContent = '🛒 Add to Cart';
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            }
+        }
+    });
 }
 
 // ============================================================
@@ -62,6 +81,13 @@ function addToCart(btn) {
 
     // Add to localStorage cart
     const cart = getCart();
+    // Prevent duplicates
+    if (cart.some(item => item.id === id)) {
+        btn.textContent = 'Already in Cart';
+        btn.disabled = true;
+        return;
+    }
+
     cart.push({ id, title, price, category, addedAt: new Date().toISOString() });
     saveCart(cart);
     updateCartDisplay();
@@ -94,23 +120,23 @@ function addToCart(btn) {
     btn.style.background = '#4CAF50';
     btn.style.color = 'white';
     btn.disabled = true;
-    setTimeout(() => {
-        btn.textContent = orig;
-        btn.style.background = '';
-        btn.style.color = '';
-        btn.disabled = false;
-    }, 1500);
 }
+window.addToCart = addToCart;
 
 // ============================================================
 // EVENT DELEGATION - ADD TO CART (works on all pages)
 // ============================================================
 document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.add-to-cart') || e.target.closest('.add-cart-btn');
-    if (btn) {
+    const btn = e.target.closest('.add-to-cart') || e.target.closest('.add-to-cart-btn');
+    if (btn && !btn.disabled) {
         e.preventDefault();
         addToCart(btn);
     }
+});
+
+// Run on page load to sync button states
+document.addEventListener('DOMContentLoaded', () => {
+    updateCartDisplay();
 });
 
 // ============================================================
@@ -259,9 +285,11 @@ function openPaymentModal() {
 
     const total = cart.reduce((s, i) => s + parseFloat(i.price || 0), 0);
 
-    // Populate step-1 amount label
+    // Populate step-1 amount and count labels
     const payAmountLabel = document.getElementById('payAmountLabel');
+    const payCountLabel = document.getElementById('payCountLabel');
     if (payAmountLabel) payAmountLabel.textContent = `$${total.toFixed(2)}`;
+    if (payCountLabel) payCountLabel.textContent = `${cart.length} book${cart.length !== 1 ? 's' : ''}`;
 
     // Populate step-1 book list
     const bookList = document.getElementById('modalBookList');
@@ -468,16 +496,18 @@ function finishPurchase() {
 window.finishPurchase = finishPurchase;
 
 // ============================================================
-// LOGIN PAGE REDIRECT (if already logged in, skip to mycart)
+// LOGIN PAGE REDIRECT (if already logged in, skip to shop)
 // ============================================================
 function checkAutoRedirect() {
     const user = getLoggedInUser();
     const onLoginPage = window.location.pathname.includes('login.html');
-    const onSignupPage = window.location.pathname.includes('signup.html');
+    const onSignupPage = window.location.pathname.includes('signup.html') ||
+        window.location.pathname.includes('buyer_signup.html') ||
+        window.location.pathname.includes('seller_signup.html');
 
     if (user && (onLoginPage || onSignupPage)) {
-        // Already logged in — redirect to mycart
-        window.location.href = 'mycart.html';
+        // Already logged in — redirect to shop
+        window.location.href = 'shop.html';
         return true;
     }
 
@@ -489,6 +519,24 @@ function checkAutoRedirect() {
     }
 
     return false;
+}
+
+// ============================================================
+// RESTORE CART FROM DB (on login / page load)
+// ============================================================
+async function restoreCartFromDB(cartItemsFromServer) {
+    if (!cartItemsFromServer || cartItemsFromServer.length === 0) return;
+    try {
+        // Merge server cart into localStorage cart (avoid duplicates by id)
+        const localCart = getCart();
+        const localIds = new Set(localCart.map(i => i.id));
+        const toAdd = cartItemsFromServer.filter(item => !localIds.has(item.id));
+        const merged = [...localCart, ...toAdd];
+        saveCart(merged);
+        updateCartDisplay();
+    } catch (err) {
+        console.warn('Cart restore error:', err.message);
+    }
 }
 
 // ============================================================
@@ -514,7 +562,6 @@ function initLoginForm() {
         const password = document.getElementById('password').value;
         const rememberMe = rememberMeCheckbox ? rememberMeCheckbox.checked : false;
 
-        // Basic client-side validation
         if (!email || !password) {
             showFormError(loginForm, 'Please enter both email and password.');
             return;
@@ -539,8 +586,23 @@ function initLoginForm() {
                     localStorage.removeItem('rememberedEmail');
                 }
 
+                // Store full user object including accountType
                 setLoggedInUser(data.user);
-                window.location.href = 'mycart.html';
+
+                // Restore cart from server (DB persistence)
+                if (data.cartItems && data.cartItems.length > 0) {
+                    await restoreCartFromDB(data.cartItems);
+                }
+
+                // Show returning user greeting
+                const greeting = document.getElementById('loginGreeting');
+                if (greeting) {
+                    greeting.textContent = `Welcome back, ${data.user.fullname}! 👋`;
+                    greeting.style.display = 'block';
+                }
+
+                // Redirect to shop (both buyer and seller see shop)
+                window.location.href = 'shop.html';
             } else {
                 showFormError(loginForm, data.message || 'Login failed. Please try again.');
             }
@@ -554,11 +616,31 @@ function initLoginForm() {
 }
 
 // ============================================================
-// SIGNUP FORM HANDLER
+// SIGNUP FORM HANDLER (for legacy signup.html)
 // ============================================================
 function initSignupForm() {
     const signupForm = document.getElementById('signupForm');
     if (!signupForm) return;
+
+    // Determine account type from URL param
+    const urlParams = new URLSearchParams(window.location.search);
+    let accountType = 'buyer';
+    if (urlParams.get('seller') === 'true') accountType = 'seller';
+    if (urlParams.get('buyer') === 'true') accountType = 'buyer';
+
+    // Update heading
+    const heading = document.querySelector('.signup-container h2');
+    if (heading) heading.textContent = `Create Your ${accountType.charAt(0).toUpperCase() + accountType.slice(1)} Account`;
+
+    // Add hidden accountType input if not present
+    let atInput = signupForm.querySelector('input[name="accountType"]');
+    if (!atInput) {
+        atInput = document.createElement('input');
+        atInput.type = 'hidden';
+        atInput.name = 'accountType';
+        signupForm.prepend(atInput);
+    }
+    atInput.value = accountType;
 
     signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -569,32 +651,15 @@ function initSignupForm() {
         const address = document.getElementById('address')?.value.trim();
         const password = document.getElementById('password')?.value;
         const confirmPassword = document.getElementById('confirmPassword')?.value;
+        const storeName = document.getElementById('storeName')?.value?.trim() || '';
 
-        // Client-side validation
         if (!fullname || !username || !email || !address || !password || !confirmPassword) {
-            showFormError(signupForm, 'All fields are required.');
-            return;
+            showFormError(signupForm, 'All fields are required.'); return;
         }
-
-        if (fullname.length < 4) {
-            showFormError(signupForm, 'Full name must be at least 4 characters.');
-            return;
-        }
-
-        if (username.length < 3) {
-            showFormError(signupForm, 'Username must be at least 3 characters.');
-            return;
-        }
-
-        if (password.length < 8) {
-            showFormError(signupForm, 'Password must be at least 8 characters.');
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            showFormError(signupForm, 'Passwords do not match. Please re-enter.');
-            return;
-        }
+        if (fullname.length < 4) { showFormError(signupForm, 'Full name must be at least 4 characters.'); return; }
+        if (username.length < 3) { showFormError(signupForm, 'Username must be at least 3 characters.'); return; }
+        if (password.length < 8) { showFormError(signupForm, 'Password must be at least 8 characters.'); return; }
+        if (password !== confirmPassword) { showFormError(signupForm, 'Passwords do not match.'); return; }
 
         const submitBtn = signupForm.querySelector('button[type="submit"]');
         if (submitBtn) { submitBtn.textContent = 'Creating Account...'; submitBtn.disabled = true; }
@@ -603,21 +668,20 @@ function initSignupForm() {
             const res = await fetch('/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fullname, username, email, address, password, confirmPassword })
+                body: JSON.stringify({ fullname, username, email, address, password, confirmPassword, accountType, storeName })
             });
-
             const data = await res.json();
-
             if (data.success) {
                 setLoggedInUser(data.user);
                 localStorage.setItem('newUser', data.user.fullname);
+                localStorage.setItem('cart', '[]');
                 window.location.href = 'shop.html';
             } else {
-                showFormError(signupForm, data.message || 'Registration failed. Please try again.');
+                showFormError(signupForm, data.message || 'Registration failed.');
             }
         } catch (err) {
             console.error('Signup error:', err);
-            showFormError(signupForm, 'Cannot connect to server. Make sure the server is running.');
+            showFormError(signupForm, 'Cannot connect to server.');
         } finally {
             if (submitBtn) { submitBtn.textContent = 'Create Account'; submitBtn.disabled = false; }
         }

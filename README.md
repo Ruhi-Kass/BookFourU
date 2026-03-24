@@ -1,124 +1,107 @@
-# 📚 BOOK4U - Your One-Stop Online Bookstore
+# 📚 Book4U - Your Ultimate Online Bookstore
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/node-%3E%3D%2014.0.0-green)
 ![MongoDB](https://img.shields.io/badge/mongodb-latest-green)
 
-**BOOK4U** is a modern, responsive e-commerce application designed for book lovers. It enables users to browse a wide variety of genres, manage their shopping carts, and securely register and log in to track their shopping experience.
+**Book4U** is a premium, responsive e-commerce platform designed for book enthusiasts. It offers a seamless experience for both **Buyers** (browsing, real-time stats, and secure checkout) and **Sellers** (listing management and store profiles).
 
 ---
 
-## 🚀 Features
+## ✨ Key Features
 
--   **User Authentication**: Secure Signup and Login functionality with password hashing.
--   **Dynamic Product Catalog**: Browse books by category (Educational, Fiction, Non-Fiction, Children's) or search by title/author.
--   **Shopping Cart**: Fully functional cart with local storage persistence (items remain after refresh).
--   **Responsive Design**: Optimized for desktops, tablets, and mobile devices.
--   **File Uploads**: Checkout process includes a payment proof upload feature.
--   **Contact Form**: Users can send messages directly through the platform.
+### 🛒 For Buyers
+- **Modern Shop Experience**: Browse books by category with real-time stats for active members, books listed, and active carts.
+- **Dynamic Cart**: Persistent shopping cart that saves your selections locally, with duplicate prevention and easy checkout.
+- **Secure Authentication**: Dedicated buyer registration and login flows.
+- **Rich Book Previews**: Hover effects for full descriptions and high-quality cover images.
+
+### 🏪 For Sellers
+- **Seller Panel**: Dedicated interface to post new book listings with status badges (In Stock, New, Bestseller).
+- **Listing Management**: Upload book covers, set prices, and choose payment preferences (PayPal/Bank Transfer).
+- **Verified Status**: Sellers are identified by their store names in the marketplace.
+
+### 🚀 Platform Highlights
+- **Real-Time Dashboard**: Live site-wide metrics (Total Members, Books, Active Carts) powered by a custom backend API.
+- **Premium UI**: Site-wide dark-green theme with glassmorphism effects, smooth animations, and a unified responsive design.
+- **Robust Backend**: Node.js/Express server with MongoDB for reliable data persistence.
 
 ---
 
 ## 🛠️ Technology Stack
 
--   **Frontend**: HTML5, CSS3, JavaScript (ES6+)
--   **Backend**: Node.js, Express.js
--   **Database**: MongoDB (Native Driver)
--   **Styling**: Custom CSS with responsive styling
--   **Icons**: FontAwesome & Custom Assets
+- **Frontend**: HTML5, CSS3 (Vanilla), JavaScript (ES6+), Inter Font Family.
+- **Backend**: Node.js, Express.js.
+- **Database**: MongoDB (Native Driver).
+- **Animations**: CSS Keyframes & staggered entrance effects.
 
 ---
 
 ## ⚙️ Prerequisites
 
-Before running the application, ensure you have the following installed:
-
-1.  **[Node.js](https://nodejs.org/)** (v14 or higher)
-2.  **[MongoDB](https://www.mongodb.com/try/download/community)** (Community Server) running locally on default port `27017`.
+- **Node.js** (v14 or higher)
+- **MongoDB** (Local instance or Atlas) running on port `27017`.
 
 ---
 
 ## 📥 Installation
 
-1.  **Clone the repository** (or download source code):
-    ```bash
-    git clone https://github.com/yourusername/book4u.git
-    cd book4u
-    ```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Ruhi-Kass/BookFourU.git
+   cd BookFourU
+   ```
 
-2.  **Install Dependencies**:
-    ```bash
-    npm install
-    ```
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-3.  **Start MongoDB**:
-    Ensure your local MongoDB instance is running.
-    ```bash
-    # Command depends on your OS, typically:
-    mongod
-    ```
-
-4.  **Initialize Database (Optional)**:
-    To ensure the database users collection is set up correctly with unique indexes, you can run:
-    ```bash
-    node reset_db.js
-    ```
+3. **Initialize the Database**:
+   Ensure MongoDB is running, then run the setup script:
+   ```bash
+   node reset_db.js
+   ```
 
 ---
 
 ## 🏃‍♂️ Usage
 
-1.  **Start the Server**:
-    ```bash
-    node server.js
-    ```
-    *You should see: `Server running at http://localhost:3000`*
+1. **Start the Development Server**:
+   ```bash
+   npm start
+   ```
+   *The server will run at [http://localhost:3000](http://localhost:3000)*
 
-2.  **Open in Browser**:
-    Navigate to [http://localhost:3000](http://localhost:3000)
-
-3.  **Explore**:
-    -   **Register**: Create a new account at `/signup.html`.
-    -   **Shop**: Browse books at `/shop.html`.
-    -   **Cart**: View your selections at `/mycart.html`.
+2. **Explore the Site**:
+   - **Home**: View live stats and featured categories.
+   - **Shop**: Browse our full collection and add books to your cart.
+   - **Sell**: Register as a seller to list your own books.
+   - **My Cart**: Review your selections and proceed to the verified transaction checkout.
 
 ---
 
-## 📂 Project Structure
+## 📂 Project Architecture
 
 ```
 BOOK4U/
-├── assets/             # Images and logos
-├── data/               # Static data files
-├── node_modules/       # Dependencies
-├── index.html      # Home Page
-├── shop.html           # Shop & Product Listing
-├── mycart.html         # Shopping Cart
-├── login.html          # Login Page
-├── signup.html         # Registration Page
-├── contact.html        # Contact Page
-├── about.html          # About Us Page
-├── script.js       # Main Frontend Logic
-├── server.js           # Node.js Express Backend
-├── style.css       # Global Stylesheet
-└── reset_db.js         # Database Utility Script
+├── server.js        # Core Express server & API endpoints
+├── script.js        # Frontend logic & State management
+├── style.css        # Global design system & animations
+├── index.html       # Home landing page
+├── shop.html        # Marketplace & Listings
+├── sell_books.html  # Seller listing form
+├── mycart.html      # Cart & Payment Modal
+├── data/            # Local data structure
+└── uploads/         # Seller-uploaded book images
 ```
-
----
-
-## 🔮 Future Improvements
-
--   [ ] Payment Gateway Integration (Stripe/PayPal)
--   [ ] User Profile Dashboard
--   [ ] Admin Panel for adding/removing books
--   [ ] Book Reviews and Ratings
 
 ---
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-Made with ❤️ by the BOOK4U Team.
+*Made with ❤️ by the Book4U Team.*

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Buyer Account - Book4U</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d2b1a 0%, #1a472a 40%, #2d6a4f 100%);
+            display: flex;
+            flex-direction: column;
+        }
+        /* Animated background blobs */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
+            opacity: 0.15;
+        }
+        .bg-blob-1 { width: 600px; height: 600px; background: #4CAF50; top: -200px; left: -200px; animation: blobMove1 12s ease-in-out infinite; }
+        .bg-blob-2 { width: 500px; height: 500px; background: #81c784; bottom: -150px; right: -150px; animation: blobMove2 15s ease-in-out infinite; }
+        .bg-blob-3 { width: 350px; height: 350px; background: #a5d6a7; top: 50%; left: 50%; animation: blobMove3 10s ease-in-out infinite; }
+        @keyframes blobMove1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(40px,30px) scale(1.1)} }
+        @keyframes blobMove2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-30px,-40px) scale(1.08)} }
+        @keyframes blobMove3 { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.15)} }
+
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 18px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { font-size: 2rem; }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: white; letter-spacing: -0.5px; }
+        .header-link { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .header-link:hover { color: white; }
+        .header-links { display: flex; gap: 28px; align-items: center; }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .signup-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 560px;
+            padding: 48px 44px;
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255,255,255,0.15);
+            animation: cardSlideUp 0.5s cubic-bezier(.22,1,.36,1);
+        }
+        @keyframes cardSlideUp { from { opacity:0; transform:translateY(40px) } to { opacity:1; transform:translateY(0) } }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border: 1px solid #a5d6a7;
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #1a2e1a;
+            line-height: 1.15;
+            margin-bottom: 6px;
+        }
+        .card-subtitle {
+            color: #777;
+            font-size: 0.92rem;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 7px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            transition: all 0.22s;
+            outline: none;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #4CAF50;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(76,175,80,0.1);
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+
+        .input-icon-wrap { position: relative; }
+        .input-icon-wrap input { padding-left: 44px; }
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.05rem;
+            pointer-events: none;
+        }
+
+        .password-wrap { position: relative; }
+        .password-wrap input { padding-right: 46px; }
+        .toggle-pw {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.05rem;
+            color: #888;
+            padding: 0;
+        }
+        .toggle-pw:hover { color: #2e7d32; }
+
+        .pw-strength { margin-top: 6px; height: 4px; border-radius: 4px; background: #e0e0e0; overflow: hidden; }
+        .pw-strength-bar { height: 100%; border-radius: 4px; transition: all 0.3s; width: 0; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2e7d32, #4CAF50, #66bb6a);
+            background-size: 200%;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 24px rgba(76,175,80,0.35);
+            margin-top: 8px;
+            letter-spacing: 0.02em;
+            position: relative;
+            overflow: hidden;
+        }
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 40%;
+            height: 200%;
+            background: rgba(255,255,255,0.2);
+            transform: skewX(-20deg);
+            transition: left 0.5s;
+        }
+        .submit-btn:hover::before { left: 120%; }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 32px rgba(76,175,80,0.45);
+        }
+        .submit-btn:active { transform: translateY(0); }
+        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        .divider { text-align: center; position: relative; margin: 22px 0 18px; }
+        .divider::before { content:''; position:absolute; inset:50% 0 auto; height:1px; background:#eee; }
+        .divider span { position:relative; background:white; padding:0 12px; color:#aaa; font-size:0.82rem; }
+
+        .login-link {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .login-link a { color: #2e7d32; font-weight: 700; text-decoration: none; }
+        .login-link a:hover { text-decoration: underline; }
+
+        .seller-link {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 12px;
+        }
+        .seller-link a { color: #1565C0; font-weight: 600; text-decoration: none; }
+        .seller-link a:hover { text-decoration: underline; }
+
+        .form-error {
+            background: #fdecea;
+            border: 1px solid #f5c6cb;
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #c62828;
+            font-size: 0.88rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .form-error.show { display: block; animation: shake 0.3s ease; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+        .perks {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 26px;
+            flex-wrap: wrap;
+        }
+        .perk {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            color: #555;
+            background: #f5f5f5;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            .signup-card { padding: 32px 24px; }
+            .form-row { grid-template-columns: 1fr; }
+            header { padding: 14px 20px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-blob bg-blob-1"></div>
+    <div class="bg-blob bg-blob-2"></div>
+    <div class="bg-blob bg-blob-3"></div>
+
+    <header>
+        <div class="logo">
+            <img src="assets/logo.png" alt="Book4U Logo" style="height:40px;">
+        </div>
+        <button class="hamburger" onclick="document.querySelector('header nav').classList.toggle('nav-open');this.classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div class="header-icons">
+            <a href="mycart.html" class="cart-link">🛒 My Cart (<span id="cartCount">0</span>)</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="signup-card">
+            <div class="badge">🛒 Buyer Account</div>
+            <h1 class="card-title">Start Your Reading Journey</h1>
+            <p class="card-subtitle">Create a free buyer account and browse thousands of amazing books.</p>
+
+            <div class="perks">
+                <span class="perk">📚 10K+ Books</span>
+                <span class="perk">🛒 Easy Cart</span>
+                <span class="perk">💰 Best Prices</span>
+                <span class="perk">🔒 Secure</span>
+            </div>
+
+            <div class="form-error" id="formError"></div>
+
+            <form id="buyerSignupForm" autocomplete="on">
+                <input type="hidden" name="accountType" value="buyer">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullname">Full Name</label>
+                        <div class="input-icon-wrap">
+                            <span class="input-icon">👤</span>
+                            <input type="text" id="fullname" name="fullname" placeholder="Your full name" required autocomplete="name" minlength="4">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-icon-wrap">
+                            <span class="input-icon">@</span>
+                            <input type="text" id="username" name="username" placeholder="Choose username" required autocomplete="username" minlength="3">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">✉️</span>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Delivery Address</label>
+                    <textarea id="address" name="address" placeholder="Enter your delivery address" required rows="2"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="password-wrap">
+                            <input type="password" id="password" name="password" placeholder="Min. 8 characters" required autocomplete="new-password" minlength="8">
+                            <button type="button" class="toggle-pw" onclick="togglePw('password', this)">👁️</button>
+                        </div>
+                        <div class="pw-strength"><div class="pw-strength-bar" id="pwBar"></div></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <div class="password-wrap">
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repeat password" required autocomplete="new-password">
+                            <button type="button" class="toggle-pw" onclick="togglePw('confirmPassword', this)">👁️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    🛒 Create Buyer Account
+                </button>
+            </form>
+
+            <div class="divider"><span>or</span></div>
+
+            <div class="login-link">
+                Already have an account? <a href="login.html">Sign in here</a>
+            </div>
+            <div class="seller-link">
+                Want to sell books? <a href="seller_signup.html">Create a Seller Account →</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ── Password toggle ──
+        function togglePw(id, btn) {
+            const inp = document.getElementById(id);
+            if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+            else { inp.type = 'password'; btn.textContent = '👁️'; }
+        }
+
+        // ── Password strength meter ──
+        document.getElementById('password').addEventListener('input', function() {
+            const v = this.value;
+            const bar = document.getElementById('pwBar');
+            let score = 0;
+            if (v.length >= 8) score++;
+            if (/[A-Z]/.test(v)) score++;
+            if (/[0-9]/.test(v)) score++;
+            if (/[^A-Za-z0-9]/.test(v)) score++;
+            const colors = ['#e74c3c','#ff9800','#ffc107','#4CAF50'];
+            bar.style.width = (score * 25) + '%';
+            bar.style.background = colors[score - 1] || '#e0e0e0';
+        });
+
+        // ── Pre-fill remembered name ──
+        const rememberedName = localStorage.getItem('rememberedBuyerName');
+        if (rememberedName) {
+            const fnField = document.getElementById('fullname');
+            if (fnField && !fnField.value) fnField.value = rememberedName;
+        }
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        if (rememberedEmail) {
+            const emField = document.getElementById('email');
+            if (emField && !emField.value) emField.value = rememberedEmail;
+        }
+
+        // ── Form submit ──
+        document.getElementById('buyerSignupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errEl = document.getElementById('formError');
+            errEl.classList.remove('show');
+
+            const fullname = document.getElementById('fullname').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!fullname || !username || !email || !address || !password || !confirmPassword) {
+                showError('Please fill in all fields.'); return;
+            }
+            if (fullname.length < 4) { showError('Full name must be at least 4 characters.'); return; }
+            if (username.length < 3) { showError('Username must be at least 3 characters.'); return; }
+            if (password.length < 8) { showError('Password must be at least 8 characters.'); return; }
+            if (password !== confirmPassword) { showError('Passwords do not match!'); return; }
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Creating Account...';
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fullname, username, email, address, password, confirmPassword, accountType: 'buyer' })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    // Save to localStorage for session
+                    localStorage.setItem('loggedInUser', JSON.stringify(data.user));
+                    localStorage.setItem('newUser', data.user.fullname);
+                    localStorage.setItem('rememberedBuyerName', data.user.fullname);
+                    localStorage.setItem('rememberedEmail', email);
+                    // Clear cart on fresh registration
+                    localStorage.setItem('cart', '[]');
+                    window.location.href = 'shop.html';
+                } else {
+                    showError(data.message || 'Registration failed.');
+                    btn.disabled = false;
+                    btn.textContent = '🛒 Create Buyer Account';
+                }
+            } catch (err) {
+                showError('Cannot connect to server. Make sure the server is running.');
+                btn.disabled = false;
+                btn.textContent = '🛒 Create Buyer Account';
+            }
+        });
+
+        function showError(msg) {
+            const el = document.getElementById('formError');
+            el.textContent = '⚠️ ' + msg;
+            el.classList.add('show');
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand footer-col">
+                <div class="footer-logo">📚 Book4U</div>
+                <p>Your ultimate destination for buying and selling books. Discover thousands of titles across every genre.</p>
+                <div class="footer-socials">
+                    <a href="#" class="footer-social-btn">📘</a>
+                    <a href="#" class="footer-social-btn">🐦</a>
+                    <a href="#" class="footer-social-btn">📷</a>
+                    <a href="#" class="footer-social-btn">✉️</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop Books</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="buyer_signup.html">Buyer Sign Up</a></li>
+                    <li><a href="seller_signup.html">Seller Sign Up</a></li>
+                    <li><a href="mycart.html" class="cart-link">🛒 My Cart</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-newsletter">
+                <h4>Stay Updated</h4>
+                <p>Get the latest book drops and deals straight to your inbox.</p>
+                <div class="footer-newsletter-form">
+                    <input type="email" placeholder="your@email.com">
+                    <button type="button">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Book4U. All rights reserved.</p>
+            <div class="footer-badges">
+                <span class="footer-badge">🔒 Secure Payments</span>
+                <span class="footer-badge">🚚 Fast Delivery</span>
+                <span class="footer-badge">⭐ Top Rated</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

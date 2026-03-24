@@ -16,6 +16,9 @@
         <div class="logo">
             <img src="assets/logo.png" alt="Book4U Logo">
         </div>
+        <button class="hamburger" id="hamburgerBtn" onclick="document.querySelector('header nav').classList.toggle('nav-open');this.classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
         <nav>
             <ul>
                 <li><a href="#" data-section="home" class="nav-link active">Home</a></li>
@@ -26,8 +29,7 @@
             </ul>
         </nav>
         <div class="header-icons">
-            <a href="mycart.html" class="nav-link" style="color: #333; text-decoration: none;">My Cart</a>
-            <span id="cartIcon" style="cursor: pointer;">🛒 <span id="cartCount">0</span></span>
+            <a href="mycart.html" class="cart-link">🛒 My Cart (<span id="cartCount">0</span>)</a>
         </div>
     </header>
 
@@ -51,17 +53,17 @@
                 <h2>Your One-Stop Bookstore</h2>
                 <p>Discover a world of books at unbeatable prices.</p>
                 <!-- Live Stats -->
-                <div class="hero-stats">
+                <div class="live-stats-bar">
                     <div class="stat-item">
-                        <span class="stat-number" id="statUsers">—</span>
+                        <span class="stat-number" id="statUsers">0</span>
                         <span class="stat-label">Members</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number" id="statBooks">—</span>
+                        <span class="stat-number" id="statBooks">0</span>
                         <span class="stat-label">Books</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number" id="statCarts">—</span>
+                        <span class="stat-number" id="statCarts">0</span>
                         <span class="stat-label">Active Carts</span>
                     </div>
                 </div>
@@ -205,8 +207,53 @@
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Book4U. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand footer-col">
+                <div class="footer-logo">📚 Book4U</div>
+                <p>Your ultimate destination for buying and selling books. Discover thousands of titles across every genre.</p>
+                <div class="footer-socials">
+                    <a href="#" class="footer-social-btn">📘</a>
+                    <a href="#" class="footer-social-btn">🐦</a>
+                    <a href="#" class="footer-social-btn">📷</a>
+                    <a href="#" class="footer-social-btn">✉️</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop Books</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="buyer_signup.html">Buyer Sign Up</a></li>
+                    <li><a href="seller_signup.html">Seller Sign Up</a></li>
+                    <li><a href="mycart.html" class="cart-link">🛒 My Cart</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-newsletter">
+                <h4>Stay Updated</h4>
+                <p>Get the latest book drops and deals straight to your inbox.</p>
+                <div class="footer-newsletter-form">
+                    <input type="email" placeholder="your@email.com">
+                    <button type="button">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Book4U. All rights reserved.</p>
+            <div class="footer-badges">
+                <span class="footer-badge">🔒 Secure Payments</span>
+                <span class="footer-badge">🚚 Fast Delivery</span>
+                <span class="footer-badge">⭐ Top Rated</span>
+            </div>
+        </div>
     </footer>
 
     <script src="script.js"></script>
@@ -555,30 +602,7 @@
             background-size: 200% 100%;
         }
 
-        .hero-stats {
-            display: flex;
-            gap: 40px;
-            justify-content: center;
-            margin-top: 20px;
-            position: relative;
-            z-index: 2;
-        }
 
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            display: block;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #764ba2;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: #666;
-        }
 
         /* Hero text should be above floating books */
         .hero-banner h1,
@@ -671,6 +695,55 @@
             }
         }
     </script>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand footer-col">
+                <div class="footer-logo">📚 Book4U</div>
+                <p>Your ultimate destination for buying and selling books. Discover thousands of titles across every genre.</p>
+                <div class="footer-socials">
+                    <a href="#" class="footer-social-btn">📘</a>
+                    <a href="#" class="footer-social-btn">🐦</a>
+                    <a href="#" class="footer-social-btn">📷</a>
+                    <a href="#" class="footer-social-btn">✉️</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop Books</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="buyer_signup.html">Buyer Sign Up</a></li>
+                    <li><a href="seller_signup.html">Seller Sign Up</a></li>
+                    <li><a href="mycart.html" class="cart-link">🛒 My Cart</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-newsletter">
+                <h4>Stay Updated</h4>
+                <p>Get the latest book drops and deals straight to your inbox.</p>
+                <div class="footer-newsletter-form">
+                    <input type="email" placeholder="your@email.com">
+                    <button type="button">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Book4U. All rights reserved.</p>
+            <div class="footer-badges">
+                <span class="footer-badge">🔒 Secure Payments</span>
+                <span class="footer-badge">🚚 Fast Delivery</span>
+                <span class="footer-badge">⭐ Top Rated</span>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

@@ -6,40 +6,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Book4U</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d2b1a 0%, #1a472a 40%, #2d6a4f 100%);
+            display: flex;
+            flex-direction: column;
+        }
+        .bg-blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(80px); opacity: 0.12; }
+        .bg-blob-1 { width: 600px; height: 600px; background: #4CAF50; top: -200px; left: -200px; animation: blobMove1 12s ease-in-out infinite; }
+        .bg-blob-2 { width: 500px; height: 500px; background: #81c784; bottom: -150px; right: -150px; animation: blobMove2 15s ease-in-out infinite; }
+        @keyframes blobMove1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(40px,30px) scale(1.1)} }
+        @keyframes blobMove2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-30px,-40px) scale(1.08)} }
+
+        header { position: relative; z-index: 10; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { font-size: 2rem; }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: white; }
+        .header-links { display: flex; gap: 24px; }
+        .header-link { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .header-link:hover { color: white; }
+
+        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; position: relative; z-index: 5; }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 460px;
+            padding: 48px 44px;
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
+            animation: cardSlideUp 0.5s cubic-bezier(.22,1,.36,1);
+        }
+        @keyframes cardSlideUp { from { opacity:0; transform:translateY(40px) } to { opacity:1; transform:translateY(0) } }
+
+        .badge { display: inline-flex; align-items: center; gap: 7px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 1px solid #a5d6a7; border-radius: 20px; padding: 6px 16px; font-size: 0.8rem; font-weight: 600; color: #2e7d32; margin-bottom: 20px; }
+        .card-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: #1a2e1a; margin-bottom: 6px; }
+        .card-subtitle { color: #777; font-size: 0.92rem; margin-bottom: 30px; }
+
+        .greeting-msg { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 1px solid #a5d6a7; border-radius: 12px; padding: 12px 16px; color: #2e7d32; font-weight: 600; font-size: 0.9rem; margin-bottom: 20px; display: none; }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: #444; margin-bottom: 7px; letter-spacing: 0.02em; text-transform: uppercase; }
+        .form-group input { width: 100%; padding: 13px 16px; border: 2px solid #e8e8e8; border-radius: 12px; font-size: 0.95rem; font-family: 'Inter', sans-serif; background: #fafafa; color: #1a1a1a; transition: all 0.22s; outline: none; }
+        .form-group input:focus { border-color: #4CAF50; background: white; box-shadow: 0 0 0 4px rgba(76,175,80,0.1); }
+
+        .input-icon-wrap { position: relative; }
+        .input-icon-wrap input { padding-left: 44px; }
+        .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1.05rem; pointer-events: none; }
+        .password-wrap { position: relative; }
+        .password-wrap input { padding-right: 46px; }
+        .toggle-pw { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.05rem; color: #888; padding: 0; }
+        .toggle-pw:hover { color: #2e7d32; }
+
+        .login-extras { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; font-size: 0.87rem; }
+        .login-extras label { display: flex; align-items: center; gap: 8px; color: #555; cursor: pointer; }
+        .login-extras input[type="checkbox"] { accent-color: #4CAF50; width: 16px; height: 16px; }
+        .login-extras a { color: #2e7d32; text-decoration: none; font-weight: 600; }
+        .login-extras a:hover { text-decoration: underline; }
+
+        .login-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #2e7d32, #4CAF50, #66bb6a); color: white; border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 6px 24px rgba(76,175,80,0.35); position: relative; overflow: hidden; }
+        .login-btn::before { content:''; position:absolute; top:-50%; left:-60%; width:40%; height:200%; background:rgba(255,255,255,0.2); transform:skewX(-20deg); transition:left 0.5s; }
+        .login-btn:hover::before { left:120%; }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(76,175,80,0.45); }
+        .login-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        .divider { text-align: center; position: relative; margin: 24px 0 18px; }
+        .divider::before { content:''; position:absolute; inset:50% 0 auto; height:1px; background:#eee; }
+        .divider span { position:relative; background:white; padding:0 12px; color:#aaa; font-size:0.82rem; }
+
+        .signup-options { display: flex; gap: 10px; }
+        .signup-opt { flex: 1; padding: 12px 10px; border-radius: 12px; text-align: center; text-decoration: none; font-size: 0.82rem; font-weight: 700; transition: all 0.2s; display: block; }
+        .signup-opt.buyer { background: #e8f5e9; color: #2e7d32; border: 2px solid #c8e6c9; }
+        .signup-opt.buyer:hover { background: #4CAF50; color: white; border-color: #4CAF50; }
+        .signup-opt.seller { background: #e8eaf6; color: #283593; border: 2px solid #c5cae9; }
+        .signup-opt.seller:hover { background: #3949ab; color: white; border-color: #3949ab; }
+        .signup-opt-icon { font-size: 1.3rem; display: block; margin-bottom: 4px; }
+
+        .form-error { background: #fdecea; border: 1px solid #f5c6cb; border-radius: 10px; padding: 12px 16px; color: #c62828; font-size: 0.88rem; font-weight: 500; margin-bottom: 16px; display: none; }
+        .form-error.show { display: block; }
+
+        @media (max-width: 500px) { .login-card { padding: 32px 22px; } header { padding: 14px 20px; } .signup-options { flex-direction: column; } }
+    </style>
 </head>
 
 <body>
+    <div class="bg-blob bg-blob-1"></div>
+    <div class="bg-blob bg-blob-2"></div>
+    <div class="bg-blob bg-blob-3"></div>
+
     <header>
         <div class="logo">
-            <img src="assets/logo.png" alt="Book4U">
+            <img src="assets/logo.png" alt="Book4U Logo" style="height:40px;">
         </div>
+        <button class="hamburger" onclick="document.querySelector('header nav').classList.toggle('nav-open');this.classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
         <nav>
             <ul>
-                <li><a href="index.html" class="back-btn">← Back to Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="login.html" class="active">Login</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
             </ul>
         </nav>
+        <div class="header-icons">
+            <a href="mycart.html" class="cart-link">🛒 My Cart (<span id="cartCount">0</span>)</a>
+        </div>
     </header>
 
-    <section class="login-section">
-        <div class="login-container">
-            <h2>Welcome Back!</h2>
-            <p class="subtitle">Sign in to your Book4U account</p>
+    <main>
+        <div class="login-card">
+            <div class="badge">🔐 Sign In</div>
+            <h1 class="card-title">Welcome Back!</h1>
+            <p class="card-subtitle">Sign in to your Book4U account to continue</p>
 
-            <form id="loginForm">
+            <!-- Greeting shown for returning users with remembered email -->
+            <div class="greeting-msg" id="loginGreeting"></div>
+
+            <div class="form-error" id="formError"></div>
+
+            <form id="loginForm" autocomplete="on">
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                    <label for="email">Email Address</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">✉️</span>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <div class="password-wrap">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                        <button type="button" class="toggle-pw" onclick="togglePw()">👁️</button>
+                    </div>
                 </div>
-
-                <button type="submit" class="login-btn">Sign In</button>
 
                 <div class="login-extras">
                     <label>
@@ -47,19 +152,102 @@
                     </label>
                     <a href="#">Forgot Password?</a>
                 </div>
+
+                <button type="submit" class="login-btn" id="loginSubmitBtn">
+                    Sign In →
+                </button>
             </form>
 
-            <div class="signup-link">
-                Don't have an account? <a href="signup.html">Sign up for free</a>
+            <div class="divider"><span>New to Book4U?</span></div>
+
+            <div class="signup-options">
+                <a href="buyer_signup.html" class="signup-opt buyer">
+                    <span class="signup-opt-icon">🛒</span>
+                    Create Buyer Account
+                </a>
+                <a href="seller_signup.html" class="signup-opt seller">
+                    <span class="signup-opt-icon">🏪</span>
+                    Create Seller Account
+                </a>
             </div>
         </div>
-    </section>
+    </main>
 
-    <footer>
-        <p>&copy; 2026 Book4U. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand footer-col">
+                <div class="footer-logo">📚 Book4U</div>
+                <p>Your ultimate destination for buying and selling books. Discover thousands of titles across every genre.</p>
+                <div class="footer-socials">
+                    <a href="#" class="footer-social-btn">📘</a>
+                    <a href="#" class="footer-social-btn">🐦</a>
+                    <a href="#" class="footer-social-btn">📷</a>
+                    <a href="#" class="footer-social-btn">✉️</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop Books</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="buyer_signup.html">Buyer Sign Up</a></li>
+                    <li><a href="seller_signup.html">Seller Sign Up</a></li>
+                    <li><a href="mycart.html" class="cart-link">🛒 My Cart</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-newsletter">
+                <h4>Stay Updated</h4>
+                <p>Get the latest book drops and deals straight to your inbox.</p>
+                <div class="footer-newsletter-form">
+                    <input type="email" placeholder="your@email.com">
+                    <button type="button">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Book4U. All rights reserved.</p>
+            <div class="footer-badges">
+                <span class="footer-badge">🔒 Secure Payments</span>
+                <span class="footer-badge">🚚 Fast Delivery</span>
+                <span class="footer-badge">⭐ Top Rated</span>
+            </div>
+        </div>
     </footer>
 
     <script src="script.js"></script>
-</body>
+    <script>
+        function togglePw() {
+            const inp = document.getElementById('password');
+            const btn = document.querySelector('.toggle-pw');
+            if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+            else { inp.type = 'password'; btn.textContent = '👁️'; }
+        }
 
+        // Show nice greeting if returning user with remembered email
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        const rememberedBuyerName = localStorage.getItem('rememberedBuyerName');
+        const rememberedSellerName = localStorage.getItem('rememberedSellerName');
+        const rememberedName = rememberedBuyerName || rememberedSellerName;
+        const emailField = document.getElementById('email');
+        const rememberMeChk = document.getElementById('rememberMe');
+        const greetingEl = document.getElementById('loginGreeting');
+
+        if (rememberedEmail && emailField) {
+            emailField.value = rememberedEmail;
+            if (rememberMeChk) rememberMeChk.checked = true;
+            if (rememberedName && greetingEl) {
+                greetingEl.textContent = `👋 Welcome back, ${rememberedName}!`;
+                greetingEl.style.display = 'block';
+            }
+        }
+    </script>
+</body>
 </html>
