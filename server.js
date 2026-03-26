@@ -57,7 +57,7 @@ async function connectDB() {
             await mongoClient.connect();
             db = mongoClient.db(dbName);
             console.log('Connected successfully to MongoDB');
-            
+
             // Ensure initialization happens once per instance
             if (!dbInitialized) {
                 await initDB();
@@ -147,7 +147,7 @@ async function initDB() {
 // ==========================================
 //  AI CHATBOT (Powered by Gemini + Live Database)
 // ==========================================
-app.post('/chat', async(req, res) => {
+app.post('/chat', async (req, res) => {
     const userMessage = req.body.message;
     const pageContext = req.body.context || "General Page";
 
@@ -159,7 +159,8 @@ app.post('/chat', async(req, res) => {
         }
 
         await connectDB();
-        const liveBooks = await getCol('books').find({}).toArray();
+        const booksCollection = await getCol('books');
+        const liveBooks = await booksCollection.find({}).toArray();
 
         const bookListString = liveBooks.map(book =>
             `- ${book.title} by ${book.author} (Category: ${book.category}, Price: $${book.price})`
@@ -195,7 +196,7 @@ app.post('/chat', async(req, res) => {
 // ==========================================
 //  STATS ENDPOINT
 // ==========================================
-app.get('/api/stats', async(req, res) => {
+app.get('/api/stats', async (req, res) => {
     try {
         await connectDB();
         const userCount = await getCol('users').countDocuments({ accountType: { $exists: true } });
@@ -210,7 +211,7 @@ app.get('/api/stats', async(req, res) => {
 // ==========================================
 //  BOOKS ENDPOINTS
 // ==========================================
-app.get('/api/books', async(req, res) => {
+app.get('/api/books', async (req, res) => {
     try {
         await connectDB();
         const books = await getCol('books').find({}).toArray();
@@ -223,7 +224,7 @@ app.get('/api/books', async(req, res) => {
 // ==========================================
 //  AUTH: REGISTER
 // ==========================================
-app.post('/api/register', async(req, res) => {
+app.post('/api/register', async (req, res) => {
     try {
         await connectDB();
         const { fullname, username, email, address, password, confirmPassword, accountType, storeName, paymentPreference } = req.body;
@@ -300,7 +301,7 @@ app.post('/api/register', async(req, res) => {
 // ==========================================
 //  AUTH: LOGIN
 // ==========================================
-app.post('/api/login', async(req, res) => {
+app.post('/api/login', async (req, res) => {
     try {
         await connectDB();
         const { email, password } = req.body;
@@ -382,7 +383,7 @@ app.post('/api/logout', (req, res) => {
 // ==========================================
 //  PROFILE (get current user info from cookie)
 // ==========================================
-app.get('/api/profile', async(req, res) => {
+app.get('/api/profile', async (req, res) => {
     try {
         await connectDB();
         const userId = req.cookies.userId;
@@ -428,7 +429,7 @@ app.get('/api/profile', async(req, res) => {
 // ==========================================
 
 // Add book to cart
-app.post('/api/cart/add', async(req, res) => {
+app.post('/api/cart/add', async (req, res) => {
     try {
         await connectDB();
         const { userId, bookId, bookTitle, bookCategory, bookPrice } = req.body;
@@ -469,7 +470,7 @@ app.post('/api/cart/add', async(req, res) => {
 });
 
 // Get user's cart
-app.get('/api/cart/:userId', async(req, res) => {
+app.get('/api/cart/:userId', async (req, res) => {
     try {
         await connectDB();
         const { userId } = req.params;
@@ -482,7 +483,7 @@ app.get('/api/cart/:userId', async(req, res) => {
 });
 
 // Remove item from cart
-app.delete('/api/cart/remove/:itemId', async(req, res) => {
+app.delete('/api/cart/remove/:itemId', async (req, res) => {
     try {
         await connectDB();
         const { itemId } = req.params;
@@ -501,7 +502,7 @@ app.delete('/api/cart/remove/:itemId', async(req, res) => {
 });
 
 // Clear entire cart (after checkout)
-app.delete('/api/cart/clear/:userId', async(req, res) => {
+app.delete('/api/cart/clear/:userId', async (req, res) => {
     try {
         await connectDB();
         const { userId } = req.params;
@@ -516,7 +517,7 @@ app.delete('/api/cart/clear/:userId', async(req, res) => {
 // ==========================================
 //  PURCHASE / TRANSACTION
 // ==========================================
-app.post('/api/purchase', async(req, res) => {
+app.post('/api/purchase', async (req, res) => {
     try {
         await connectDB();
         const { userId, transactionId, cartItems, total } = req.body;
@@ -552,7 +553,7 @@ app.post('/api/purchase', async(req, res) => {
 // ==========================================
 //  SELLER: POST A BOOK
 // ==========================================
-app.post('/api/seller/post-book', upload.single('bookImage'), async(req, res) => {
+app.post('/api/seller/post-book', upload.single('bookImage'), async (req, res) => {
     try {
         await connectDB();
         const userId = req.cookies.userId;
@@ -609,7 +610,7 @@ app.post('/api/seller/post-book', upload.single('bookImage'), async(req, res) =>
 // ==========================================
 //  USERS LIST (for admin visibility)
 // ==========================================
-app.get('/api/users', async(req, res) => {
+app.get('/api/users', async (req, res) => {
     try {
         await connectDB();
         const users = await getCol('users').find({}, { projection: { password: 0 } }).toArray();
@@ -632,7 +633,7 @@ function requireAdmin(req, res, next) {
 }
 
 // Admin Login
-app.post('/api/admin/login', async(req, res) => {
+app.post('/api/admin/login', async (req, res) => {
     try {
         await connectDB();
         const { username, password } = req.body;
@@ -651,7 +652,7 @@ app.post('/api/admin/login', async(req, res) => {
 });
 
 // Add a book (admin only)
-app.post('/api/admin/books', requireAdmin, async(req, res) => {
+app.post('/api/admin/books', requireAdmin, async (req, res) => {
     try {
         await connectDB();
         const { title, author, price, origPrice, category, pages, badge, imageUrl, image, description } = req.body;
@@ -684,7 +685,7 @@ app.post('/api/admin/books', requireAdmin, async(req, res) => {
 });
 
 // Delete a book (admin only)
-app.delete('/api/admin/books/:id', requireAdmin, async(req, res) => {
+app.delete('/api/admin/books/:id', requireAdmin, async (req, res) => {
     try {
         await connectDB();
         const { id } = req.params;
@@ -707,7 +708,7 @@ app.delete('/api/admin/books/:id', requireAdmin, async(req, res) => {
 // ==========================================
 //  TRACK BOOK VIEW
 // ==========================================
-app.post("/api/track-view", async(req, res) => {
+app.post("/api/track-view", async (req, res) => {
     try {
         await connectDB();
 
@@ -735,7 +736,7 @@ app.post("/api/track-view", async(req, res) => {
 // ==========================================
 //  RECOMMEND BOOKS
 // ==========================================
-app.get("/api/recommendations", async(req, res) => {
+app.get("/api/recommendations", async (req, res) => {
     try {
         await connectDB();
 
@@ -870,7 +871,7 @@ app.get('/api/stats', async (req, res) => {
         const userCount = await getCol('users').countDocuments();
         const bookCount = await getCol('books').countDocuments();
         const cartCount = await getCol('carts').countDocuments();
-        
+
         res.json({
             success: true,
             userCount,
